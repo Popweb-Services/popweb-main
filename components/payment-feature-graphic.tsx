@@ -31,7 +31,7 @@ const PaymentFeatureGraphic: React.FC<PaymentFeatureGraphicProps> = ({}) => {
       <FeatureGraphicContainer>
         <figure
           dir="rtl"
-          className="flex flex-col gap-y-2 rounded-bl-xl aspect-[1.5] w-[350px] p-4 pt-10 bg-[#FDFDFD] absolute -top-8 z-10 transition-transform duration-500 group-hover:translate-y-5"
+          className="flex flex-col gap-y-2 rounded-bl-xl aspect-[1.5] lg:scale-100 md:scale-75 scale-95 origin-top-right max-w-[432px] p-4 pt-10 bg-[#FDFDFD] absolute -top-8 z-10 transition-transform duration-500 group-hover:translate-y-5"
         >
           <h2 className="font-semibold">پرداخت با :</h2>
           <hr />

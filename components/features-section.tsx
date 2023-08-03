@@ -2,6 +2,7 @@ import { Balancer } from "react-wrap-balancer"
 
 import { siteConfig } from "@/config/site"
 
+import CouponGraphic from "./coupon-graphic"
 import FeatureCard from "./feature-card"
 import PaymentFeatureGraphic from "./payment-feature-graphic"
 import {
@@ -36,16 +37,19 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({}) => {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="w-full h-full ">
-              {siteConfig.features.map((feature) => {
-                const { graphic: Graphic } = feature
-                return (
-                  <FeatureCard
-                    graphic={<Graphic />}
-                    description={feature.description}
-                    title={feature.title}
-                  />
-                )
-              })}
+              {/* TODO: this code should be written better */}
+              <FeatureCard
+                graphic={<PaymentFeatureGraphic />}
+                title={siteConfig.features[0].title}
+                description={siteConfig.features[0].description}
+              />
+            </div>
+            <div className="w-full h-full md:first-letter md:pt-28">
+              <FeatureCard
+                graphic={<CouponGraphic />}
+                title={siteConfig.features[1].title}
+                description={siteConfig.features[1].description}
+              />
             </div>
           </div>
         </div>

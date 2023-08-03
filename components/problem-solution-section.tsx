@@ -15,25 +15,32 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({}) => {
             <h2 className="text-3xl font-bold">
               <Balancer>با مشکلات فروشگاه آنلاین خداحافظی کنید</Balancer>
             </h2>
-            <Balancer>
-              <div className="space-y-4">
-                <p className="text-xl font-medium">
+
+            <div className="space-y-4">
+              <p className="text-xl font-medium">
+                <Balancer>
                   راه اندازی یک فروشگاه آنلاین برای کسب و کارتان می تواند مفید
                   باشد اما این کار می تواند مشکلات و چالش های زیادی را در پی
                   داشته باشد.
-                </p>
-                <p className="text-md text-neutral-500">
+                </Balancer>
+              </p>
+              <p className="text-md text-neutral-500">
+                <Balancer>
                   از جمله چالش هایی که کسب و کار ها هنگام راه اندازی فروشگاه
                   آنلاین با آن مواجه اند می توان به پیدا کردن طراح متخصص ، هزینه
                   بالا زمان بر بودن پروسه طراحی و نیاز به دانش فنی اشاره کرد.
-                </p>
-              </div>
-            </Balancer>
+                </Balancer>
+              </p>
+            </div>
           </div>
           <div className="flex flex-col pt-20">
-            <Balancer>
-              <p className="text-lg"></p>
-            </Balancer>
+            <p className="text-lg">
+              <Balancer>
+                فروشگاه ساز پاپ وب این امکان را برای شما فراهم می کند تا تنها با
+                چند کلیک و در سریع ترین زمان ممکن فروشگاه آنلاین خود را به صورت
+                رایگان راه اندازی کنید و از امکانات آن بهره مند شوید.
+              </Balancer>
+            </p>
           </div>
         </div>
       </section>
