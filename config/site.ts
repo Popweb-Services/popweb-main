@@ -1,6 +1,7 @@
 import { LuCloudLightning, LuCode } from "react-icons/lu"
 import { TbFreeRights } from "react-icons/tb"
 
+import CouponGraphic from "@/components/coupon-graphic"
 import PaymentFeatureGraphic from "@/components/payment-feature-graphic"
 
 export type SiteConfig = typeof siteConfig
@@ -45,6 +46,12 @@ export const siteConfig = {
       title: "اتصال به انواع درگاه های پرداخت",
       description:
         "شما می توانید فروشگاه خود را به انواع درگاه های بانکی مستقیم و غیر مستقیم و همچنین درگاه های پرداخت اقساطی مانند اسنپ پی متصل کنید.",
+    },
+    {
+      graphic: CouponGraphic,
+      title: "ایجاد کد تخفیف",
+      description:
+        "در فروشگاه ساز پاپ وب شما می توانید برای کالا ها و سبد خرید کد تخفیف ایجاد کنید و آن را شخصی سازی کنید.",
     },
   ],
   faq: [
