@@ -1,5 +1,6 @@
 import Image from "next/image"
 
+import FeatureGraphicContainer from "./feature-graphic-container"
 import { Button } from "./ui/button"
 import GradientBackground from "./ui/gradient-background"
 
@@ -27,8 +28,7 @@ const paymentMethods = [
 const PaymentFeatureGraphic: React.FC<PaymentFeatureGraphicProps> = ({}) => {
   return (
     <>
-      <div className="relative w-full h-full select-none">
-        <GradientBackground />
+      <FeatureGraphicContainer>
         <figure
           dir="rtl"
           className="flex flex-col gap-y-2 rounded-bl-xl aspect-[1.5] w-[350px] p-4 pt-10 bg-[#FDFDFD] absolute -top-8 z-10 transition-transform duration-500 group-hover:translate-y-5"
@@ -52,7 +52,7 @@ const PaymentFeatureGraphic: React.FC<PaymentFeatureGraphicProps> = ({}) => {
             پرداخت
           </Button>
         </figure>
-      </div>
+      </FeatureGraphicContainer>
     </>
   )
 }
