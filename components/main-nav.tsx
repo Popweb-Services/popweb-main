@@ -1,41 +1,30 @@
-import * as React from "react"
-import Link from "next/link"
+"use client"
 
-import { NavItem } from "@/types/nav"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
 
 interface MainNavProps {
-  items?: NavItem[]
+  className?: string
 }
 
-export function MainNav({ items }: MainNavProps) {
+const MainNav: React.FC<MainNavProps> = ({ className }) => {
+  const pathname = usePathname()
   return (
-    <div className="flex gap-6 md:gap-10">
-      <Link href="/" className="flex items-center space-x-2">
-        <Icons.logo className="h-6 w-6" />
-        <span className="inline-block font-bold">{siteConfig.name}</span>
-      </Link>
-      {items?.length ? (
-        <nav className="flex gap-6">
-          {items?.map(
-            (item, index) =>
-              item.href && (
-                <Link
-                  key={index}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center text-sm font-medium text-muted-foreground",
-                    item.disabled && "cursor-not-allowed opacity-80"
-                  )}
-                >
-                  {item.title}
-                </Link>
-              )
-          )}
-        </nav>
-      ) : null}
-    </div>
+    <nav className="hidden sm:block">
+      <ul
+        className={cn("flex flex-row-reverse items-center gap-x-6", className)}
+      >
+        {siteConfig.mainNav.map((route) => (
+          <li>
+            <Link className="hover:opacity-50 transition-opacity font-semibold text-sm" href={route.href}>{route.label}</Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   )
 }
+
+export default MainNav
