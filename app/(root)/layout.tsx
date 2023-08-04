@@ -27,11 +27,11 @@ export const metadata: Metadata = {
   },
 }
 
-interface RootLayoutProps {
+interface MainLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <>
       <Navbar />
