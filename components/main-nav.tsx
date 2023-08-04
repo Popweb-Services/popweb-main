@@ -18,8 +18,13 @@ const MainNav: React.FC<MainNavProps> = ({ className }) => {
         className={cn("flex flex-row-reverse items-center gap-x-6", className)}
       >
         {siteConfig.mainNav.map((route) => (
-          <li>
-            <Link className="hover:opacity-50 transition-opacity font-semibold text-sm" href={route.href}>{route.label}</Link>
+          <li key={route.href}>
+            <Link
+              className="hover:opacity-50 transition-opacity font-semibold text-sm"
+              href={route.href}
+            >
+              {route.label}
+            </Link>
           </li>
         ))}
       </ul>

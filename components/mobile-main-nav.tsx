@@ -48,7 +48,7 @@ const MobileMainNav: React.FC<MobileMainNavProps> = ({}) => {
             <div className="w-full h-full relative">
               <ul className="w-full flex flex-col pt-4 space-y-4">
                 {siteConfig.mainNav.map((route) => (
-                  <li className="ml-auto w-full">
+                  <li key={route.href} className="ml-auto w-full">
                     <Link
                       dir="rtl"
                       className={cn(

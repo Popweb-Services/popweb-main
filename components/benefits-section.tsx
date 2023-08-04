@@ -12,18 +12,21 @@ interface BenefitsSectionProps {}
 const BenefitsSection: React.FC<BenefitsSectionProps> = ({}) => {
   return (
     <>
-      <section className="w-full bg-primary">
+      <section className="w-full bg-primarySlate">
         <div
           dir="rtl"
-          className="container mx-auto grid grid-cols-1 gp-x-6 md:grid-cols-3 max-w-6xl py-[50px] border-x-2 border-dashed max-md:gap-y-4"
+          className="container mx-auto grid grid-cols-1 gap-x-8 md:grid-cols-3 max-w-6xl py-[50px] border-x-2 border-dashed max-md:gap-y-4"
         >
           {siteConfig.benefits.map((benefit) => (
             <div key={benefit.title} className="flex flex-col gap-y-4">
-              <Icon icon={benefit.icon} className="text-accent w-10 h-10" />
+              <Icon
+                icon={benefit.icon}
+                className="text-primaryPurple w-10 h-10"
+              />
               <h2 className="text-white font-semibold">
                 <Balancer>{benefit.title}</Balancer>
               </h2>
-              <p className="text-neutral-400">
+              <p className="text-textSecondary">
                 <Balancer>{benefit.description}</Balancer>
               </p>
             </div>

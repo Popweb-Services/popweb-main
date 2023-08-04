@@ -1,3 +1,5 @@
+import GradientBackground from "./ui/gradient-background"
+
 interface FeatureCardProps {
   graphic: React.ReactNode
   title: string
@@ -12,7 +14,8 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   return (
     <>
       <div dir="rtl" className="bg-white p-1 rounded-md group shadow-md">
-        <div className="aspect-[1.5] w-full bg-[#F5F8FC] rounded-md overflow-hidden">
+        <div className="aspect-[1.5] relative w-full bg-[#F5F8FC] rounded-md overflow-hidden">
+          <GradientBackground />
           {graphic}
         </div>
         <div className="p-[32px] flex flex-col gap-y-3">
