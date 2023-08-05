@@ -1,15 +1,17 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import axios, { AxiosError } from "axios"
 import { useForm } from "react-hook-form"
 
 import {
-  SignInValidator,
-  SignInValidatorType,
   SignUpValidator,
   SignUpValidatorType,
 } from "@/lib/validators/auth-validators"
+import { useToast } from "@/hooks/use-toast"
 
 import { Button } from "./ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"
@@ -26,6 +28,8 @@ import { Input } from "./ui/input"
 interface SignUpFormProps {}
 
 const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
+  const { toast } = useToast()
+  const router = useRouter()
   const form = useForm<SignUpValidatorType>({
     resolver: zodResolver(SignUpValidator),
     defaultValues: {
@@ -34,8 +38,38 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
       confirm: "",
     },
   })
-  const onSubmit = (values: SignInValidatorType) => {
-    // TODO:handle register
+  const { mutate: createUser, isLoading } = useMutation({
+    mutationFn: async (payload: SignUpValidatorType) => {
+      await axios.post("/api/register", payload)
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        if (error.status === 400) {
+          return toast({
+            title: "حساب کاربری ایجاد نشد",
+            description: "کاربری قبلا با این ایمیل ثبت نام کرده است.",
+            variant: "destructive",
+          })
+        } else {
+          return toast({
+            title: "خطای سیستمی",
+            description:
+              "لطفا دقایقی دیگر امتحان کنید و یا با پشتیبانی تماس بگیرید",
+            variant: "destructive",
+          })
+        }
+      }
+    },
+    onSuccess: () => {
+      toast({
+        description: "حساب کاربری شما ایجاد شد",
+      })
+      router.push("/dashboard")
+    },
+  })
+  const onSubmit = (values: SignUpValidatorType) => {
+    createUser(values)
+    // TODO:authenticate user in
   }
   return (
     <>
@@ -55,7 +89,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
                   <FormItem>
                     <FormLabel>ایمیل</FormLabel>
                     <FormControl>
-                      <Input {...field} className="h-[44px]" type="email" />
+                      <Input
+                        disabled={isLoading}
+                        {...field}
+                        className="h-[44px]"
+                        type="email"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -68,7 +107,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
                   <FormItem>
                     <FormLabel>رمز عبور</FormLabel>
                     <FormControl>
-                      <Input {...field} className="h-[44px]" type="password" />
+                      <Input
+                        {...field}
+                        disabled={isLoading}
+                        className="h-[44px]"
+                        type="password"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -81,13 +125,22 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
                   <FormItem>
                     <FormLabel>تکرار کلمه عبور</FormLabel>
                     <FormControl>
-                      <Input {...field} className="h-[44px]" type="password" />
+                      <Input
+                        {...field}
+                        disabled={isLoading}
+                        className="h-[44px]"
+                        type="password"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button className="w-full rounded-md h-[44px] bg-primaryPurple hover:bg-primaryPurple/90">
+              <Button
+                disabled={isLoading}
+                type="submit"
+                className="w-full rounded-md h-[44px] bg-primaryPurple hover:bg-primaryPurple/90"
+              >
                 ثبت نام
               </Button>
             </form>

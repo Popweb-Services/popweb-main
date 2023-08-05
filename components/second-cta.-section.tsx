@@ -17,7 +17,7 @@ const SecondCTASection: React.FC<SecondCTASectionProps> = ({}) => {
             <Balancer>همین الان فروشگاهتون رو راه اندازی کنید</Balancer>
           </h2>
           <Link
-            href={""}
+            href={"/sign-up"}
             className={cn(
               buttonVariants({ variant: "default" }),
               "group flex items-center gap-x-3 bg-primaryPurple hover:bg-primaryPurple/90"

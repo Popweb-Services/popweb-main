@@ -13,7 +13,7 @@ export const SignUpValidator = z
     password: z
       .string()
       .min(8, { message: "کلمه عبور باید حداقل 8 کاراکتر باشد" })
-      .regex(/^.*[a-zA-Z0-9]+.*$/, {
+      .regex(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/, {
         message: "کلمه عبور باید دارای حداقل 1 حرف و عدد باشد",
       }),
     confirm: z.string(),

@@ -2,6 +2,7 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 import { Urbanist } from "next/font/google"
 import localFont from "next/font/local"
+import Provider from "@/providers/provider"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -39,7 +40,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body className={cn(IranSans.className)}>{children}</body>
+        <body className={cn(IranSans.className)}>
+          <Provider>{children}</Provider>
+        </body>
       </html>
     </>
   )

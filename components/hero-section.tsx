@@ -1,8 +1,11 @@
 import Image from "next/image"
+import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { Balancer } from "react-wrap-balancer"
 
-import { Button } from "./ui/button"
+import { cn } from "@/lib/utils"
+
+import { Button, buttonVariants } from "./ui/button"
 
 interface HeroSectionProps {}
 
@@ -36,13 +39,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({}) => {
                 شروع کنید.
               </Balancer>
             </p>
-            <Button className="flex bg-primarySlate hover:bg-primarySlate/90 items-center gap-x-2 text-xs md:text-sm group">
+            <Link
+              href="/sign-up"
+              className={cn( buttonVariants({ variant: "default" }),
+                "flex bg-primarySlate hover:bg-primarySlate/90 items-center gap-x-2 text-xs md:text-sm group w-[200px]"
+              )}
+            >
               ساخت فروشگاه رایگان
               <ArrowLeft
                 size={20}
                 className="group-hover:-translate-x-1 transition-transform"
               />
-            </Button>
+            </Link>
           </div>
         </div>
       </section>
