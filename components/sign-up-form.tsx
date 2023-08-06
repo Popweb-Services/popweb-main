@@ -40,11 +40,11 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
   })
   const { mutate: createUser, isLoading } = useMutation({
     mutationFn: async (payload: SignUpValidatorType) => {
-      await axios.post("/api/register", payload)
+      const { data } = await axios.post("/api/register", payload)
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        if (error.status === 400) {
+        if (error.response?.status === 400) {
           return toast({
             title: "حساب کاربری ایجاد نشد",
             description: "کاربری قبلا با این ایمیل ثبت نام کرده است.",
@@ -54,8 +54,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
           return toast({
             title: "خطای سیستمی",
             description:
-              "لطفا دقایقی دیگر امتحان کنید و یا با پشتیبانی تماس بگیرید",
-            variant: "destructive",
+              "لطفا دقایقی دیگر دوباره امتحان کنید و یا با پشتیبانی تماس بگیرید.",
           })
         }
       }
