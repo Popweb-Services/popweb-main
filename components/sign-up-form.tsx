@@ -40,7 +40,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
   })
   const { mutate: createUser, isLoading } = useMutation({
     mutationFn: async (payload: SignUpValidatorType) => {
-      const { data } = await axios.post("/api/register", payload)
+      await axios.post("/api/register", payload)
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
