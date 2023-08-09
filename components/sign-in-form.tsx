@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
+import { ImSpinner8 } from "react-icons/im"
 
 import {
   SignInValidator,
@@ -41,7 +42,6 @@ const SignInForm: React.FC<SignInFormProps> = ({}) => {
   const onSubmit = (values: SignInValidatorType) => {
     setIsLoading(true)
     signIn("credentials", { ...values, redirect: false }).then((callback) => {
-      console.log(callback)
       if (callback?.error) {
         toast({
           title: "ورود ناموفق",
@@ -120,9 +120,14 @@ const SignInForm: React.FC<SignInFormProps> = ({}) => {
               />
               <Button
                 disabled={isLoading}
+                type="submit"
                 className="w-full rounded-md h-[44px] bg-primaryPurple hover:bg-primaryPurple/90"
               >
-                ورود
+                {isLoading ? (
+                  <ImSpinner8 className="animate-spin" />
+                ) : (
+                  <p>ورود</p>
+                )}
               </Button>
             </form>
           </Form>

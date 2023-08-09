@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
+import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
+import { ImSpinner8 } from "react-icons/im"
 
 import {
   SignUpValidator,
@@ -41,6 +43,21 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
   const { mutate: createUser, isLoading } = useMutation({
     mutationFn: async (payload: SignUpValidatorType) => {
       await axios.post("/api/register", payload)
+      signIn("credentials", {
+        email: payload.email,
+        password: payload.password,
+        redirect: false,
+      }).then((callback) => {
+        if (callback?.error) {
+          toast({
+            title: "ورود ناموفق",
+            description: "ایمیل یا کلمه عبور اشتباه است.",
+            variant: "destructive",
+          })
+        } else {
+          router.push("/dashboard")
+        }
+      })
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -63,12 +80,10 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
       toast({
         description: "حساب کاربری شما ایجاد شد",
       })
-      router.push("/dashboard")
     },
   })
   const onSubmit = (values: SignUpValidatorType) => {
     createUser(values)
-    // TODO:authenticate user in
   }
   return (
     <>
@@ -140,7 +155,11 @@ const SignUpForm: React.FC<SignUpFormProps> = ({}) => {
                 type="submit"
                 className="w-full rounded-md h-[44px] bg-primaryPurple hover:bg-primaryPurple/90"
               >
-                ثبت نام
+                {isLoading ? (
+                  <ImSpinner8 className="animate-spin" />
+                ) : (
+                  <p> ثبت نام</p>
+                )}
               </Button>
             </form>
           </Form>
