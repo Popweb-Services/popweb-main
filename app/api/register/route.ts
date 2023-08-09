@@ -16,13 +16,13 @@ export async function POST(request: NextRequest) {
       return new NextResponse("User already exists", { status: 400 })
     }
     const hashedPassword = await bcrypt.hash(password, 12)
-    await prismadb.user.create({
+    const user = await prismadb.user.create({
       data: {
         email,
         hashedPassword,
       },
     })
-    return new NextResponse("User created", { status: 200 })
+    return NextResponse.json(user, { status: 200 })
   } catch (error) {
     console.log("REGISTER_POST", error)
     if (error instanceof z.ZodError) {

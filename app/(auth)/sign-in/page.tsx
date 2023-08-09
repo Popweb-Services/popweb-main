@@ -1,12 +1,15 @@
-"use client"
+import { redirect } from "next/navigation"
 
-import { Card, CardHeader, CardTitle } from "@/components/ui/card"
-import Logo from "@/components/ui/logo"
+import { getAuthSession } from "@/lib/session"
 import SignInForm from "@/components/sign-in-form"
 
 interface SignInPageProps {}
 
-const SignInPage: React.FC<SignInPageProps> = ({}) => {
+const SignInPage = async ({}) => {
+  const session = await getAuthSession()
+  if (session?.user) {
+    redirect("/dashboard")
+  }
   return (
     <>
       <SignInForm />

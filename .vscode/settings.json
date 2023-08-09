@@ -3,6 +3,7 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "conventionalCommits.scopes": [
     "landing-page",
-    "auth"
+    "auth",
+    "email"
   ]
 }
