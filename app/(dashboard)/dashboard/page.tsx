@@ -2,6 +2,10 @@ import { redirect } from "next/navigation"
 
 import prismadb from "@/lib/prismadb"
 import { getAuthSession } from "@/lib/session"
+import { Button } from "@/components/ui/button"
+
+import DashboardClient from "./components/dashboard-client"
+import DashboardNavbar from "./components/dashboard-navbar"
 
 interface DashboardPageProps {}
 
@@ -18,7 +22,19 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({}) => {
   if (!user?.isEmailVerified) {
     return redirect("/verify-email")
   }
-  return <></>
+  const store = await prismadb.store.findFirst({
+    where: {
+      userId: session.user.id,
+    },
+  })
+  if (store) {
+    return redirect(`/dashboard/${store.id}`)
+  }
+  return (
+    <>
+      <DashboardClient />
+    </>
+  )
 }
 
 export default DashboardPage

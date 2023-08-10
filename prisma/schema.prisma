@@ -18,4 +18,14 @@ model User {
   email           String  @unique
   isEmailVerified Boolean @default(false)
   hashedPassword  String
+  hasUsedTrial    Boolean @default(false)
+  store           Store[] @relation("StoreToUser")
+}
+
+model Store {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  isTest Boolean @default(false)
+  userId String  @db.ObjectId
+  user   User    @relation("StoreToUser", fields: [userId], references: [id])
 }
