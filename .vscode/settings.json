@@ -4,6 +4,7 @@
   "conventionalCommits.scopes": [
     "landing-page",
     "auth",
-    "email"
+    "email",
+    "dashboard"
   ]
 }

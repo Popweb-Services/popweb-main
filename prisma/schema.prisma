@@ -11,21 +11,39 @@ datasource db {
 }
 
 model User {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
   name            String?
   phone           String?
   nationalCode    String?
-  email           String  @unique
-  isEmailVerified Boolean @default(false)
+  email           String   @unique
+  isEmailVerified Boolean  @default(false)
   hashedPassword  String
-  hasUsedTrial    Boolean @default(false)
-  store           Store[] @relation("StoreToUser")
+  hasUsedTrial    Boolean  @default(false)
+  store           Store[]  @relation("StoreToUser")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Store {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  name   String
-  isTest Boolean @default(false)
-  userId String  @db.ObjectId
-  user   User    @relation("StoreToUser", fields: [userId], references: [id])
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  isTest    Boolean    @default(false)
+  userId    String     @db.ObjectId
+  user      User       @relation("StoreToUser", fields: [userId], references: [id])
+  category  Category[] @relation("CategoryToStore")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Category {
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  storeId          String     @db.ObjectId
+  store            Store      @relation("CategoryToStore", fields: [storeId], references: [id])
+  parentCategoryId String?    @db.ObjectId
+  parentCategory   Category?  @relation("Category", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subcategories    Category[] @relation("Category")
+  isArchived       Boolean    @default(false)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 }

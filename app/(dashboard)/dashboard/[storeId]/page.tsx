@@ -31,11 +31,7 @@ const StoreOverviewPage: React.FC<StoreOverviewPageProps> = async ({
 
   return (
     <>
-      {store?.isTest && (
-        <div className="fixed p-1 top-0 text-white scale-75 origin-top rounded-b-lg left-1/2 -translate-x-1/2 bg-[#ED6704] ">
-          نسخه آزمایشی
-        </div>
-      )}
+
     </>
   )
 }

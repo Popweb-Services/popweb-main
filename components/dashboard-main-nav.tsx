@@ -33,15 +33,15 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
   ]
   return (
     <>
-      <nav>
+      <nav className="hidden md:block">
         <ul className="flex items-center justify-start gap-x-1">
           {routes.map((route) => (
             <li
               className={cn(
-                "py-1 px-3 text-sm transition-opacity cursor-pointer rounded-full",
+                "py-1 px-3 text-sm font-semibold transition-colors cursor-pointer rounded-full",
                 route.active
                   ? "bg-primaryPurple text-white"
-                  : "hover:opacity-50"
+                  : "hover:bg-secondary"
               )}
             >
               <Link href={route.href}>{route.label}</Link>

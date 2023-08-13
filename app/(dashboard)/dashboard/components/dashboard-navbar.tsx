@@ -18,7 +18,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = async ({ user }) => {
   })
   return (
     <>
-      <div className="w-full h-12 bg-secondary shadow-sm fixed">
+      <div className="w-full h-12 bg-white border-b fixed">
         <div className="container h-full mx-auto flex items-center justify-between">
           <div className="flex items-center gap-x-8">
             <StoreSwitcher stores={stores} />

@@ -101,6 +101,7 @@ const CreateStoreModal: React.FC<CreateStoreModalProps> = ({}) => {
                   </FormItem>
                 )}
               />
+
               <Button
                 disabled={isLoading}
                 className="rounded-lg bg-primaryPurple hover:bg-primaryPurple/90 mt-4 w-full"
