@@ -5,8 +5,6 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { Balancer } from "react-wrap-balancer"
 
-import { cn } from "@/lib/utils"
-import useCategoryDeleteAlertModal from "@/hooks/use-category-delete-alert-modal"
 import { useToast } from "@/hooks/use-toast"
 
 import {
@@ -18,25 +16,27 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./ui/alert-dialog"
-import { buttonVariants } from "./ui/button"
-import { Separator } from "./ui/separator"
+} from "../ui/alert-dialog"
+import { Separator } from "../ui/separator"
+import useCategoryArchiveAlertModal from "@/hooks/use-category-archive-alert-modal"
 
-interface CategoryDeleteAlertModalProps {}
+interface CategoryArchiveAlertModalProps {}
 
 type IParams = {
   storeId: string
 }
 
-const CategoryDeleteAlertModal: React.FC<
-  CategoryDeleteAlertModalProps
+const CategoryArchiveAlertModal: React.FC<
+  CategoryArchiveAlertModalProps
 > = ({}) => {
   const { toast } = useToast()
   const params = useParams() as IParams
   const router = useRouter()
-  const { mutate: deleteCategory, isLoading } = useMutation({
+  const { mutate: archiveCategory, isLoading } = useMutation({
     mutationFn: async () => {
-      await axios.delete(`/api/${params.storeId}/categories/${categoryId}/`)
+      await axios.patch(
+        `/api/${params.storeId}/categories/${categoryId}/archive`
+      )
     },
     onError: () => {
       toast({
@@ -47,14 +47,13 @@ const CategoryDeleteAlertModal: React.FC<
     },
     onSuccess: () => {
       toast({
-        title: "حذف دسته بندی",
-        description: "دسته بندی با موفقیت خذف شد",
+        title: "آرشیو دسته بندی",
+        description: "دسته بندی با موفقیت آرشیو شد",
       })
-      router.push(`/dashboard/${params.storeId}/categories`)
       router.refresh()
     },
   })
-  const { isOpen, onClose, onOpen, categoryId } = useCategoryDeleteAlertModal()
+  const { isOpen, onClose, onOpen, categoryId } = useCategoryArchiveAlertModal()
   const onOpenChange = (open: boolean) => {
     if (!open) {
       onClose()
@@ -66,13 +65,14 @@ const CategoryDeleteAlertModal: React.FC<
         <AlertDialogContent dir="rtl">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-right">
-              حذف دسته بندی
+              آرشیو دسته بندی
             </AlertDialogTitle>
             <Separator />
             <AlertDialogDescription className="text-right text-lg py-4">
               <Balancer>
-                با حذف این دسته بندی دیگر امکان بازگشت وجود ندارد ، آیا از انجام
-                این کار اطمینان دارید ؟
+                آرشیو این دسته بندی باعث می شود مشتریان شما این دسته بندی و
+                همچنین تمام زیر دسته بندی ها را مشاهده نکنند ، آیا از آرشیو این
+                دسته بندی اطمینان دارید ؟
               </Balancer>
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -83,13 +83,10 @@ const CategoryDeleteAlertModal: React.FC<
             </AlertDialogCancel>
             <AlertDialogAction
               disabled={isLoading}
-              onClick={() => deleteCategory()}
-              className={cn(
-                buttonVariants({ variant: "destructive" }),
-                "rounded-lg"
-              )}
+              onClick={() => archiveCategory()}
+              className="rounded-lg bg-primaryPurple hover:bg-primaryPurple/90"
             >
-              حذف
+              آرشیو
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -98,4 +95,4 @@ const CategoryDeleteAlertModal: React.FC<
   )
 }
 
-export default CategoryDeleteAlertModal
+export default CategoryArchiveAlertModal

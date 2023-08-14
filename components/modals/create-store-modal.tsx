@@ -12,8 +12,8 @@ import { createStoreFormSchema } from "@/lib/validators/store-validators"
 import useCreateStoreModal from "@/hooks/use-create-store-modal"
 import { toast } from "@/hooks/use-toast"
 
-import { Button } from "./ui/button"
-import { Dialog, DialogContent, DialogHeader } from "./ui/dialog"
+import { Button } from "../ui/button"
+import { Dialog, DialogContent, DialogHeader } from "../ui/dialog"
 import {
   Form,
   FormControl,
@@ -21,8 +21,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form"
-import { Input } from "./ui/input"
+} from "../ui/form"
+import { Input } from "../ui/input"
 
 interface CreateStoreModalProps {}
 

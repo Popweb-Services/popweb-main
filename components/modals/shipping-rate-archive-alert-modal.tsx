@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { Balancer } from "react-wrap-balancer"
 
+import useShippingRateArchiveAlertModal from "@/hooks/use-shipping-rate-archive-alert-modal"
 import { useToast } from "@/hooks/use-toast"
 
 import {
@@ -16,26 +17,25 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./ui/alert-dialog"
-import { Separator } from "./ui/separator"
-import useCategoryArchiveAlertModal from "@/hooks/use-category-archive-alert-modal"
+} from "../ui/alert-dialog"
+import { Separator } from "../ui/separator"
 
-interface CategoryArchiveAlertModalProps {}
+interface ShippingRateArchiveAlertModalProps {}
 
 type IParams = {
   storeId: string
 }
 
-const CategoryArchiveAlertModal: React.FC<
-  CategoryArchiveAlertModalProps
+const ShippingRateArchiveAlertModal: React.FC<
+  ShippingRateArchiveAlertModalProps
 > = ({}) => {
   const { toast } = useToast()
   const params = useParams() as IParams
   const router = useRouter()
-  const { mutate: archiveCategory, isLoading } = useMutation({
+  const { mutate: archiveShippingRate, isLoading } = useMutation({
     mutationFn: async () => {
       await axios.patch(
-        `/api/${params.storeId}/categories/${categoryId}/archive`
+        `/api/${params.storeId}/shipping-rates/${shippingRateId}/archive`
       )
     },
     onError: () => {
@@ -47,13 +47,13 @@ const CategoryArchiveAlertModal: React.FC<
     },
     onSuccess: () => {
       toast({
-        title: "آرشیو دسته بندی",
-        description: "دسته بندی با موفقیت آرشیو شد",
+        title: "آرشیو نحوه ارسال",
+        description: "نحوه ارسال با موفقیت آرشیو شد",
       })
       router.refresh()
     },
   })
-  const { isOpen, onClose, onOpen, categoryId } = useCategoryArchiveAlertModal()
+  const { isOpen, onClose, shippingRateId } = useShippingRateArchiveAlertModal()
   const onOpenChange = (open: boolean) => {
     if (!open) {
       onClose()
@@ -65,14 +65,14 @@ const CategoryArchiveAlertModal: React.FC<
         <AlertDialogContent dir="rtl">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-right">
-              آرشیو دسته بندی
+              آرشیو نحوه ارسال
             </AlertDialogTitle>
             <Separator />
             <AlertDialogDescription className="text-right text-lg py-4">
               <Balancer>
-                آرشیو این دسته بندی باعث می شود مشتریان شما این دسته بندی و
-                همچنین تمام زیر دسته بندی ها را مشاهده نکنند ، آیا از آرشیو این
-                دسته بندی اطمینان دارید ؟
+                با آرشیو این نحوه ارسال مشتریان شما قادر به انتخاب این نحوه
+                ارسال هنگام پرداخت نخواهند بود ، آیا از آرشیو این نحوه ارسال
+                اطمینان دارید ؟
               </Balancer>
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -83,7 +83,7 @@ const CategoryArchiveAlertModal: React.FC<
             </AlertDialogCancel>
             <AlertDialogAction
               disabled={isLoading}
-              onClick={() => archiveCategory()}
+              onClick={() => archiveShippingRate()}
               className="rounded-lg bg-primaryPurple hover:bg-primaryPurple/90"
             >
               آرشیو
@@ -95,4 +95,4 @@ const CategoryArchiveAlertModal: React.FC<
   )
 }
 
-export default CategoryArchiveAlertModal
+export default ShippingRateArchiveAlertModal

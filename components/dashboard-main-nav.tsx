@@ -26,6 +26,11 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
       active: pathname === `/dashboard/${params.storeId}/categories`,
     },
     {
+      label: "نحوه ارسال",
+      href: `/dashboard/${params.storeId}/shipping-rates`,
+      active: pathname === `/dashboard/${params.storeId}/shipping-rates`,
+    },
+    {
       label: "محصولات",
       href: `/dashboard/${params.storeId}/products`,
       active: pathname === `/dashboard/${params.storeId}/products`,
