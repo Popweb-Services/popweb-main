@@ -15,10 +15,16 @@ interface CreateCategoryPageProps {
 const CreateCategoryPage: React.FC<CreateCategoryPageProps> = async ({
   params,
 }) => {
+  const banners = await prismadb.banner.findMany({
+    where: {
+      storeId: params.storeId,
+    },
+  })
   const categories = await prismadb.category.findMany({
     where: {
       storeId: params.storeId,
     },
+    orderBy: { createdAt: "desc" },
   })
   let category
   try {
@@ -36,6 +42,7 @@ const CreateCategoryPage: React.FC<CreateCategoryPageProps> = async ({
         storeId={params.storeId}
         categories={categories}
         category={category}
+        banners={banners}
       />
     </>
   )

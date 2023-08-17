@@ -3,7 +3,11 @@ import { z } from "zod"
 
 import prismadb from "@/lib/prismadb"
 import { getAuthSession } from "@/lib/session"
-import { createCategoryFormSchema } from "@/lib/validators/store-validators"
+import {
+  createBannerFormSchema,
+  createCategoryFormSchema,
+  shippingRateFormSchema,
+} from "@/lib/validators/store-validators"
 
 interface IParams {
   params: {
@@ -24,18 +28,19 @@ export async function POST(request: Request, { params }: IParams) {
       return new NextResponse("Forbidden", { status: 403 })
     }
     const body = await request.json()
-    const { name, parent, bannerId } = createCategoryFormSchema.parse(body)
-    await prismadb.category.create({
+    const { name, imageUrl } = createBannerFormSchema.parse(body)
+    await prismadb.banner.create({
       data: {
         name,
-        bannerId,
-        parentCategoryId: parent === "no-parent" ? undefined : parent,
+        imageUrl,
         storeId: params.storeId,
+       
       },
     })
-    return new NextResponse("Category created", { status: 200 })
+
+    return new NextResponse("Banner created", { status: 200 })
   } catch (error) {
-    console.log("[CATEGORIES_POST]", error)
+    console.log("BANNERS_POST]", error)
     if (error instanceof z.ZodError) {
       return new NextResponse("Invaldi request data passed", { status: 422 })
     }
@@ -45,14 +50,14 @@ export async function POST(request: Request, { params }: IParams) {
 
 export async function GET(_request: Request, { params }: IParams) {
   try {
-    const categories = await prismadb.category.findMany({
+    const banners = await prismadb.banner.findMany({
       where: {
         storeId: params.storeId,
       },
     })
-    return NextResponse.json(categories, { status: 200 })
+    return NextResponse.json(banners, { status: 200 })
   } catch (error) {
-    console.log("[CATEGORIES_GET]", error)
+    console.log("[BANNERS_GET]", error)
     return new NextResponse("Internal Server Error", { status: 500 })
   }
 }

@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { Button } from "../../../../../../components/ui/button"
+import { Button } from "@/components/ui/button"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -49,7 +49,7 @@ export function DataTable<TData, TValue>({
     <>
       <div dir="rtl" className="flex items-center gap-x-3 py-4">
         <Input
-          placeholder="جستجو با نام نحوه ارسال ..."
+          placeholder="جستجو با نام بنر ..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -103,7 +103,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  هیچ نحوه ارسالی یافت نشد
+                  هیچ بنری ای یافت نشد
                 </TableCell>
               </TableRow>
             )}

@@ -25,6 +25,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = async ({ params }) => {
     include: {
       parentCategory: true,
       subcategories: true,
+      banner: true,
     },
   })
 
@@ -35,6 +36,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = async ({ params }) => {
     createdAt: category.createdAt.toLocaleString("fa-IR"),
     isArchived: category.isArchived,
     subCategories: category.subcategories,
+    banner: category.banner,
   }))
   return (
     <>

@@ -1,4 +1,5 @@
-import { Category } from "@prisma/client"
+import Image from "next/image"
+import { Banner, Category } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
 import CellAction from "./cell-action"
@@ -9,6 +10,7 @@ export type CategoryColumn = {
   parentCategory?: string
   createdAt: string
   isArchived: boolean
+  banner?: Banner | null
   subCategories: Category[]
 }
 
@@ -31,6 +33,29 @@ export const columns: ColumnDef<CategoryColumn>[] = [
     cell: ({ row }) => (
       <div dir="rtl" className="">
         {row.original.parentCategory ?? "بدون دسته بندی پدر"}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "banner",
+    header: "بنر",
+    cell: ({ row }) => (
+      <div dir="rtl" className="flex items-center gap-x-2">
+        {row.original.banner ? (
+          <>
+            <div className="w-[40px] relative aspect-[1.5] border rounded-md">
+              <Image
+                src={row.original.banner?.imageUrl}
+                alt="تصویر بنر"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <p>{row.original.banner.name}</p>
+          </>
+        ) : (
+          <p>بدون بنر</p>
+        )}
       </div>
     ),
   },

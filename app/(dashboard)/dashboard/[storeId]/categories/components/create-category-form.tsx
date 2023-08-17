@@ -1,8 +1,10 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Category } from "@prisma/client"
+import { Banner, Category } from "@prisma/client"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { Trash, Trash2 } from "lucide-react"
@@ -37,6 +39,7 @@ import { Separator } from "@/components/ui/separator"
 interface CreateCategoryFormProps {
   category?: Category | null
   categories: Category[]
+  banners: Banner[]
   storeId: string
 }
 
@@ -44,6 +47,7 @@ const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
   category,
   categories,
   storeId,
+  banners,
 }) => {
   const actionLabel = category ? "ویرایش دسته بندی" : "ایجاد دسته بندی"
   const formTitle = category ? "ویرایش دسته بندی" : "ایجاد دسته بندی جدید"
@@ -58,6 +62,7 @@ const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
     defaultValues: {
       name: category?.name ?? "",
       parent: category?.parentCategoryId ?? "",
+      bannerId: category?.bannerId ?? "",
     },
   })
   const { mutate: createCategory, isLoading } = useMutation({
@@ -87,6 +92,13 @@ const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
   const onSubmit = (values: z.infer<typeof createCategoryFormSchema>) => {
     console.log(values)
     createCategory(values)
+  }
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+  if (!isMounted) {
+    return null
   }
   return (
     <>
@@ -158,6 +170,59 @@ const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
                       <SelectItem value="no-parent">
                         بدون دسته بندی پدر
                       </SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="bannerId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-md font-semibold">
+                    بنر (اختیاری)
+                  </FormLabel>
+                  <FormDescription>
+                    بنری که انتخاب میکنید در صفحه دسته بندی نمایش داده خواهد شد
+                    <div className=""></div>
+                  </FormDescription>
+                  <Select
+                    value={field.value}
+                    disabled={isLoading}
+                    dir="rtl"
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-[80px]">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="انتخاب دسته بندی پدر"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {banners.map((banner) => (
+                        <SelectItem
+                          value={banner.id}
+                          className="h-[80px] cursor-pointer"
+                        >
+                          <div dir="rtl" className="flex items-center gap-x-2">
+                            <div className=" border rounded-md w-[80px] aspect-[1.5] h-auto relative">
+                              <Image
+                                src={banner.imageUrl}
+                                alt="تصویر بنر"
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                            <p>{banner.name}</p>
+                          </div>
+                        </SelectItem>
+                      ))}
+                      <SelectItem value={""}>بدون بنر</SelectItem>
                     </SelectContent>
                   </Select>
 

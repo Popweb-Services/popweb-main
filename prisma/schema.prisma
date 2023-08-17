@@ -25,15 +25,19 @@ model User {
 }
 
 model Store {
-  id           String         @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  isTest       Boolean        @default(false)
-  userId       String         @db.ObjectId
-  user         User           @relation("StoreToUser", fields: [userId], references: [id])
-  category     Category[]     @relation("CategoryToStore")
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  shippingRate ShippingRate[] @relation("ShippingRateToStore")
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  isTest        Boolean        @default(false)
+  userId        String         @db.ObjectId
+  user          User           @relation("StoreToUser", fields: [userId], references: [id])
+  categories    Category[]     @relation("CategoryToStore")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  shippingRates ShippingRate[] @relation("ShippingRateToStore")
+  banners       Banner[]       @relation("BannerToStore")
+  bannerId      String?
+  products      Product[]      @relation("ProductToStore")
+  colors        Color[]        @relation("ColorToStore")
 }
 
 model Category {
@@ -44,6 +48,8 @@ model Category {
   parentCategoryId String?    @db.ObjectId
   parentCategory   Category?  @relation("Category", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   subcategories    Category[] @relation("Category")
+  bannerId         String?    @db.ObjectId
+  banner           Banner?    @relation("CategoryToBanner", fields: [bannerId], references: [id])
   isArchived       Boolean    @default(false)
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
@@ -60,4 +66,46 @@ model ShippingRate {
   store       Store    @relation("ShippingRateToStore", fields: [storeId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Banner {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  imageUrl   String
+  isArchived Boolean    @default(false)
+  storeId    String     @db.ObjectId
+  store      Store      @relation("BannerToStore", fields: [storeId], references: [id])
+  categories Category[] @relation("CategoryToBanner")
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Product {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  storeId      String   @db.ObjectId
+  store        Store    @relation("ProductToStore", fields: [storeId], references: [id])
+  mainImageUrl String
+  colors       Color[]  @relation(fields: [colorIds], references: [id])
+  colorIds     String[] @db.ObjectId
+  sizes        Size[]   @relation(fields: [sizeIds], references: [id])
+  sizeIds      String[] @db.ObjectId
+}
+
+model Color {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  value      String
+  storeId    String    @db.ObjectId
+  store      Store     @relation("ColorToStore", fields: [storeId], references: [id])
+  productIds String[]  @db.ObjectId
+  products   Product[] @relation(fields: [productIds], references: [id])
+}
+
+model Size {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  value      String
+  productIds String[]  @db.ObjectId
+  products   Product[] @relation(fields: [productIds], references: [id])
 }
