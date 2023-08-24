@@ -21,6 +21,16 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
       active: pathname === `/dashboard/${params.storeId}`,
     },
     {
+      label: "انبار",
+      href: `/dashboard/${params.storeId}/inventory`,
+      active: pathname.includes(`/dashboard/${params.storeId}/inventory`),
+    },
+    {
+      label: "محصولات",
+      href: `/dashboard/${params.storeId}/products`,
+      active: pathname.includes(`/dashboard/${params.storeId}/products`),
+    },
+    {
       label: "دسته بندی",
       href: `/dashboard/${params.storeId}/categories`,
       active: pathname.includes(`/dashboard/${params.storeId}/categories`),
@@ -34,11 +44,6 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
       label: "نحوه ارسال",
       href: `/dashboard/${params.storeId}/shipping-rates`,
       active: pathname.includes(`/dashboard/${params.storeId}/shipping-rates`),
-    },
-    {
-      label: "محصولات",
-      href: `/dashboard/${params.storeId}/products`,
-      active: pathname.includes(`/dashboard/${params.storeId}/products`),
     },
   ]
   return (

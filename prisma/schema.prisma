@@ -37,7 +37,6 @@ model Store {
   banners       Banner[]       @relation("BannerToStore")
   bannerId      String?
   products      Product[]      @relation("ProductToStore")
-  colors        Color[]        @relation("ColorToStore")
 }
 
 model Category {
@@ -53,6 +52,7 @@ model Category {
   isArchived       Boolean    @default(false)
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
+  products         Product[]
 }
 
 model ShippingRate {
@@ -81,31 +81,47 @@ model Banner {
 }
 
 model Product {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  storeId      String   @db.ObjectId
-  store        Store    @relation("ProductToStore", fields: [storeId], references: [id])
-  mainImageUrl String
-  colors       Color[]  @relation(fields: [colorIds], references: [id])
-  colorIds     String[] @db.ObjectId
-  sizes        Size[]   @relation(fields: [sizeIds], references: [id])
-  sizeIds      String[] @db.ObjectId
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  description        Json?
+  quantity           Int
+  price              Int?
+  priceAfterDiscount Int?
+  costAtPrice        Int?
+  unit               String?
+  options            ProductOption[]
+  variants           Variant[]
+  storeId            String          @db.ObjectId
+  store              Store           @relation("ProductToStore", fields: [storeId], references: [id])
+  mainImageUrl       String
+  categoryId         String?         @db.ObjectId
+  category           Category?       @relation(fields: [categoryId], references: [id])
+  images             Image[]
+  isArchived         Boolean         @default(false)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 }
 
-model Color {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  value      String
-  storeId    String    @db.ObjectId
-  store      Store     @relation("ColorToStore", fields: [storeId], references: [id])
-  productIds String[]  @db.ObjectId
-  products   Product[] @relation(fields: [productIds], references: [id])
+model Image {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  imageUrl  String
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
 }
 
-model Size {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  value      String
-  productIds String[]  @db.ObjectId
-  products   Product[] @relation(fields: [productIds], references: [id])
+model ProductOption {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  values    String[]
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
+}
+
+model Variant {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  options   String[]
+  price     Int?
+  quantity  Int
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
 }

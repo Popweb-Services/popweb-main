@@ -17,7 +17,7 @@ const poppins = Poppins({ weight: "900", subsets: ["latin"] })
 const Navbar: React.FC<NavbarProps> = ({}) => {
   return (
     <>
-      <header className="w-full z-40 h-12 md:h-16 bg-white fixed top-0 shadow-sm">
+      <header className="w-full z-50 h-12 md:h-16 bg-white fixed top-0 shadow-sm">
         <div className="container max-w-5xl h-full mx-auto flex items-center justify-between">
           <MobileMainNav />
           <Link
