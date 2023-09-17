@@ -7,6 +7,7 @@ import Provider from "@/providers/provider"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import Footer from "@/components/footer"
+import NextTopLoader from "nextjs-toploader"
 
 const urbanist = Urbanist({ subsets: ["latin"] })
 
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <>
       <html lang="en" suppressHydrationWarning>
         <body className={cn(IranSans.className)}>
+          <NextTopLoader color="#635BFF" />
           <Provider>{children}</Provider>
         </body>
       </html>

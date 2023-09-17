@@ -69,6 +69,7 @@
     "next": "^13.4.8",
     "next-auth": "^4.22.3",
     "next-themes": "^0.2.1",
+    "nextjs-toploader": "^1.4.2",
     "nodemailer": "^6.9.4",
     "primereact": "^9.6.1",
     "query-string": "^8.1.0",
