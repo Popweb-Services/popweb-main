@@ -14,7 +14,7 @@ interface CategoriesPageProps {
   }
 }
 
-const CategoriesPage: React.FC<CategoriesPageProps> = async ({ params }) => {
+const CategoriesPage = async ({ params }:CategoriesPageProps) => {
   const banners = await prismadb.banner.findMany({
     where: {
       storeId: params.storeId,
@@ -24,7 +24,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = async ({ params }) => {
     },
   })
 
-  const formattedBanners: BannerColumn[] = banners.map((banner) => ({
+  const formattedBanners: BannerColumn[] = banners.map((banner:any) => ({
     id: banner.id,
     name: banner.name,
     imageUrl: banner.imageUrl,

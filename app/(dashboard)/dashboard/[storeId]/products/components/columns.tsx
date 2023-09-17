@@ -2,6 +2,8 @@ import Image from "next/image"
 import { Variant } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
+import { priceFormatter } from "@/lib/formatter"
+
 import CellAction from "./cell-action"
 
 export type ProductColumn = {

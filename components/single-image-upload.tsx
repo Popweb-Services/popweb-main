@@ -18,6 +18,7 @@ import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 
 interface SingleImageUploadProps {
+  label: string
   imageUrl?: string
   onChange: (imageUrl: string) => void
   onRemove: () => void
@@ -28,6 +29,7 @@ type IParams = {
 }
 
 const SingleImageUpload: React.FC<SingleImageUploadProps> = ({
+  label,
   imageUrl,
   onChange,
 }) => {
@@ -62,7 +64,7 @@ const SingleImageUpload: React.FC<SingleImageUploadProps> = ({
     },
     onSuccess: () => {
       toast({
-        description: "بنر با موفقیت آپلود شد.",
+        description: "عکس با موفقیت آپلود شد.",
       })
     },
     onError: () => {
@@ -123,7 +125,7 @@ const SingleImageUpload: React.FC<SingleImageUploadProps> = ({
                   <ImSpinner8 className="animate-spin" />
                 ) : (
                   <div className="flex items-center gap-x-2">
-                    <p>آپلود بنر</p>
+                    <p>{label}</p>
                     <Upload className="w-4 h-4" />
                   </div>
                 )}

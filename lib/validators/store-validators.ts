@@ -36,6 +36,14 @@ export const createProductFormSchema = z.object({
   name: z.string().min(3, { message: "نام محصول باید حداقل 3 حرف باشد" }),
   description: z.any().optional(),
   category: z.string().optional(),
+  features: z
+    .object({
+      name: z.string(),
+      value: z.string(),
+    })
+    .array()
+    .optional(),
+  isFeatured: z.boolean().default(false),
   price: z.coerce.number().min(0, { message: "قیمت باید بزرگ تر از 0 باشد." }),
   priceAfterDiscount: z.coerce
     .number()
@@ -59,8 +67,18 @@ export const createProductFormSchema = z.object({
   variants: z
     .object({
       options: z.string().array(),
-      price: z.coerce.number().optional(),
+      price: z.coerce.number(),
+      priceAfterDiscount: z.coerce.number().optional(),
       quantity: z.coerce.number(),
     })
     .array(),
+})
+
+export const phoneNumberValidator = z.object({
+  phone: z
+    .string()
+    .min(1, { message: "این فیلد اجباری است." })
+    .regex(/^09\d{9}/g, {
+      message: "شماره موبایل نا معتبر میباشد.",
+    }),
 })

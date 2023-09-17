@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Banner, Category } from "@prisma/client"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { Trash, Trash2 } from "lucide-react"
@@ -10,6 +9,7 @@ import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { z } from "zod"
 
+import { BannerType } from "@/types/banner-type"
 import { cn } from "@/lib/utils"
 import { createBannerFormSchema } from "@/lib/validators/store-validators"
 import { useToast } from "@/hooks/use-toast"
@@ -36,7 +36,7 @@ import { Separator } from "@/components/ui/separator"
 import SingleImageUpload from "@/components/single-image-upload"
 
 interface CreateCategoryFormProps {
-  banner?: Banner | null
+  banner?: BannerType | null
   storeId: string
 }
 
@@ -109,6 +109,7 @@ const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
                   <FormControl>
                     <SingleImageUpload
                       {...field}
+                      label="آپلود بنر"
                       imageUrl={field.value}
                       onChange={(imageUrl) => {
                         field.onChange(imageUrl)

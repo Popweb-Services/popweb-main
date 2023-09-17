@@ -14,9 +14,7 @@ interface ShippingRatesPageProps {
   }
 }
 
-const ShippingRatesPage: React.FC<ShippingRatesPageProps> = async ({
-  params,
-}) => {
+const ShippingRatesPage = async ({ params } : ShippingRatesPageProps) => {
   const shippingRates = await prismadb.shippingRate.findMany({
     where: {
       storeId: params.storeId,

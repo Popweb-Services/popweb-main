@@ -1,6 +1,7 @@
 import Image from "next/image"
-import { Banner, Category } from "@prisma/client"
-import { ColumnDef } from "@tanstack/react-table"
+import { Category } from "@prisma/client"
+
+import { BannerType } from "@/types/banner-type"
 
 import CellAction from "./cell-action"
 
@@ -10,15 +11,15 @@ export type CategoryColumn = {
   parentCategory?: string
   createdAt: string
   isArchived: boolean
-  banner?: Banner | null
+  banner?: BannerType | null
   subCategories: Category[]
 }
 
-export const columns: ColumnDef<CategoryColumn>[] = [
+export const columns: any[] = [
   {
     accessorKey: "name",
     header: "نام",
-    cell: ({ row }) => (
+    cell: ({ row }: { row: any }) => (
       <div dir="rtl" className="flex items-center gap-x-2">
         <p>{row.original.name}</p>
         {row.original.isArchived && (
@@ -30,7 +31,7 @@ export const columns: ColumnDef<CategoryColumn>[] = [
   {
     accessorKey: "parent",
     header: "دسته بندی پدر",
-    cell: ({ row }) => (
+    cell: ({ row }: { row: any }) => (
       <div dir="rtl" className="">
         {row.original.parentCategory ?? "بدون دسته بندی پدر"}
       </div>
@@ -39,7 +40,7 @@ export const columns: ColumnDef<CategoryColumn>[] = [
   {
     accessorKey: "banner",
     header: "بنر",
-    cell: ({ row }) => (
+    cell: ({ row }: { row: any }) => (
       <div dir="rtl" className="flex items-center gap-x-2">
         {row.original.banner ? (
           <>
@@ -60,5 +61,5 @@ export const columns: ColumnDef<CategoryColumn>[] = [
     ),
   },
   { accessorKey: "createdAt", header: "تاریخ ایجاد" },
-  { id: "actions", cell: ({ row }) => <CellAction category={row.original} /> },
+  { id: "actions", cell: ({ row }: { row: any }) => <CellAction category={row.original} /> },
 ]

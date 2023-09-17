@@ -42,7 +42,7 @@ export async function PATCH(request: Request, { params }: IParams) {
     })
     return new NextResponse("Banner Updated", { status: 200 })
   } catch (error) {
-    console.log('[BANNER_PATCH]',error)
+    console.log("[BANNER_PATCH]", error)
     if (error instanceof z.ZodError) {
       return new NextResponse(error.message, { status: 422 })
     }
@@ -74,5 +74,22 @@ export async function DELETE(_request: Request, { params }: IParams) {
   } catch (error) {
     console.log(error)
     return new NextResponse("Internal sever error", { status: 500 })
+  }
+}
+
+export async function GET(request: Request, { params }: IParams) {
+  try {
+    if (params.bannerId === "null") {
+      return NextResponse.json(null, { status: 200 })
+    }
+    const banner = await prismadb.banner.findUnique({
+      where: {
+        storeId: params.storeId,
+        id: params.bannerId,
+      },
+    })
+    return NextResponse.json(banner)
+  } catch (error) {
+    console.log("[BANNER_GET]", error)
   }
 }

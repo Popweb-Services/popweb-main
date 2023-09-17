@@ -10,10 +10,10 @@ interface IndividualStoreLayoutProps {
   }
 }
 
-const IndividualStoreLayout: React.FC<IndividualStoreLayoutProps> = async ({
+const IndividualStoreLayout = async ({
   params,
   children,
-}) => {
+}:IndividualStoreLayoutProps) => {
   try {
     const store = await prismadb.store.findUnique({
       where: { id: params.storeId },

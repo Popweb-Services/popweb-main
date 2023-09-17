@@ -5,16 +5,16 @@ import { Separator } from "@/components/ui/separator"
 
 import CreateProductForm from "../components/create-product-form"
 
-interface CreateCategoryPageProps {
+interface CreateProductPageProps {
   params: {
     storeId: string
     productId: string
   }
 }
 
-const CreateCategoryPage: React.FC<CreateCategoryPageProps> = async ({
+const CreateProductPage = async ({
   params,
-}) => {
+}:CreateProductPageProps) => {
   let product
   try {
     product = await prismadb.product.findUnique({
@@ -22,6 +22,7 @@ const CreateCategoryPage: React.FC<CreateCategoryPageProps> = async ({
         id: params.productId,
       },
       include: {
+        features: true,
         images: true,
         options: true,
         variants: true,
@@ -46,4 +47,4 @@ const CreateCategoryPage: React.FC<CreateCategoryPageProps> = async ({
   )
 }
 
-export default CreateCategoryPage
+export default CreateProductPage

@@ -15,6 +15,15 @@ interface IParams {
     productId: string
   }
 }
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+}
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders })
+}
 
 export async function PATCH(request: Request, { params }: IParams) {
   try {
@@ -44,58 +53,89 @@ export async function PATCH(request: Request, { params }: IParams) {
       category,
       costAtPrice,
       priceAfterDiscount,
+      isFeatured,
       unit,
+      features,
     } = createProductFormSchema.parse(body)
-    await prismadb.productOption.deleteMany({
+    const product = await prismadb.product.update({
       where: {
         id: params.productId,
       },
-    })
-    await prismadb.variant.deleteMany({
-      where: {
-        id: params.productId,
-      },
-    })
-    await prismadb.product.delete({
-      where: {
-        id: params.productId,
-      },
-    })
-    const product = await prismadb.product.create({
       data: {
-        storeId: params.storeId,
         name,
+        price,
         description,
         mainImageUrl,
-        images: imageUrls && {
-          createMany: { data: imageUrls.map((url) => ({ imageUrl: url })) },
-        },
         categoryId: category,
-        quantity,
-        price,
-        priceAfterDiscount,
         costAtPrice,
+        isFeatured,
         unit,
-        options: options && {
-          createMany: {
-            data: options.map((option) => ({
-              name: option.name,
-              values: option.values.map((value) => value.value),
-            })),
-          },
-        },
+        priceAfterDiscount,
+        quantity,
       },
     })
-    if (variants.length !== 0) {
-      await prismadb.variant.updateMany({
+    //  delete product images
+    await prismadb.image.deleteMany({
+      where: {
+        productId: params.productId,
+      },
+    })
+    // create new images
+    await prismadb.image.createMany({
+      data: imageUrls.map((url) => ({
+        productId: params.productId,
+        imageUrl: url,
+      })),
+    })
+    if (options.length !== 0) {
+      // delete options
+      await prismadb.productOption.deleteMany({
         where: {
           productId: params.productId,
         },
-        data: variants?.map((variant) => ({
-          productId: product.id,
+      })
+      // create new options
+      await prismadb.productOption.createMany({
+        data: options.map((option) => ({
+          name: option.name,
+          values: option.values.map((value) => value.value),
+          productId: params.productId,
+          storeId: params.storeId,
+        })),
+      })
+    }
+    if (features && features.length !== 0) {
+      // delete features
+      await prismadb.productFeature.deleteMany({
+        where: {
+          productId: params.productId,
+        },
+      })
+      // create new features
+      await prismadb.productFeature.createMany({
+        data: features.map((feature) => ({
+          name: feature.name,
+          value: feature.value,
+          productId: params.productId,
+        })),
+      })
+    }
+    if (variants.length !== 0) {
+      // delete variants
+      await prismadb.variant.deleteMany({
+        where: {
+          productId: params.productId,
+        },
+      })
+      // create new variants for product
+      await prismadb.variant.createMany({
+        data: variants.map((variant) => ({
+          quantity: variant.quantity,
           options: variant.options,
           price: variant.price,
-          quantity: variant.quantity,
+          priceAfterDiscount: variant.priceAfterDiscount,
+          storeId: params.storeId,
+          productId: params.productId,
         })),
       })
     }
@@ -133,5 +173,30 @@ export async function DELETE(_request: Request, { params }: IParams) {
   } catch (error) {
     console.log("[PRODUCT_DELETE]", error)
     return new NextResponse("Internal sever error", { status: 500 })
+  }
+}
+
+export async function GET(request: Request, { params }: IParams) {
+  try {
+    const product = await prismadb.product.findUnique({
+      where: {
+        storeId: params.storeId,
+        id: params.productId,
+      },
+      include: {
+        variants: true,
+        options: true,
+        images: true,
+        category: true,
+        features: true,
+      },
+    })
+    return NextResponse.json(product, { status: 200, headers: corsHeaders })
+  } catch (error) {
+    console.log("[PRODUCT_GET]", error)
+    return new NextResponse("Internal server error", {
+      status: 500,
+      headers: corsHeaders,
+    })
   }
 }

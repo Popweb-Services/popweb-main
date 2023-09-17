@@ -36,9 +36,11 @@ export async function POST(request: Request, { params }: IParams) {
       costAtPrice,
       priceAfterDiscount,
       unit,
+      isFeatured,
       variants,
+      features,
     } = createProductFormSchema.parse(body)
-
+    console.log(body)
     const product = await prismadb.product.create({
       data: {
         storeId: params.storeId,
@@ -53,23 +55,37 @@ export async function POST(request: Request, { params }: IParams) {
         price,
         priceAfterDiscount,
         costAtPrice,
+        isDiscounted: priceAfterDiscount ? true : false,
+        isFeatured,
         unit,
-        options: options && {
-          createMany: {
-            data: options.map((option) => ({
-              name: option.name,
-              values: option.values.map((value) => value.value),
-            })),
-          },
-        },
       },
     })
+    if (options.length !== 0) {
+      await prismadb.productOption.createMany({
+        data: options.map((option) => ({
+          storeId: params.storeId,
+          name: option.name,
+          values: option.values.map((value) => value.value),
+        })),
+      })
+    }
+    if (features && features?.length !== 0) {
+      await prismadb.productFeature.createMany({
+        data: features?.map((feature) => ({
+          name: feature.name,
+          value: feature.value,
+          productId: product.id,
+        })),
+      })
+    }
     if (variants.length !== 0) {
-      const newVariants = await prismadb.variant.createMany({
+      await prismadb.variant.createMany({
         data: variants?.map((variant) => ({
+          storeId: params.storeId,
           productId: product.id,
           options: variant.options,
           price: variant.price,
+          priceAfterDiscount: variant.priceAfterDiscount,
           quantity: variant.quantity,
         })),
       })
@@ -84,16 +100,27 @@ export async function POST(request: Request, { params }: IParams) {
   }
 }
 
-export async function GET(_request: Request, { params }: IParams) {
+export async function GET(request: Request, { params }: IParams) {
   try {
-    const shippingRates = await prismadb.shippingRate.findMany({
+    const { searchParams } = new URL(request.url)
+    const categoryId = searchParams.get("categoryId")
+    const isDiscounted = searchParams.get("isDiscounted")
+    const isFeatured = searchParams.get("isFeatured")
+
+    if (!params.storeId) {
+      return new NextResponse("invalid store id", { status: 400 })
+    }
+    const products = await prismadb.product.findMany({
       where: {
         storeId: params.storeId,
+        isFeatured: isFeatured === "true" ? true : false,
+        isDiscounted: isDiscounted === "true" ? true : false,
+        isArchived: false,
       },
     })
-    return NextResponse.json(shippingRates, { status: 200 })
+
+    return NextResponse.json(products, { status: 200 })
   } catch (error) {
-    console.log("[SHIPPINH_RATES_GET]", error)
-    return new NextResponse("Internal Server Error", { status: 500 })
+    console.log("[PRODUCTS_GET]", error)
   }
 }

@@ -21,11 +21,6 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
       active: pathname === `/dashboard/${params.storeId}`,
     },
     {
-      label: "انبار",
-      href: `/dashboard/${params.storeId}/inventory`,
-      active: pathname.includes(`/dashboard/${params.storeId}/inventory`),
-    },
-    {
       label: "محصولات",
       href: `/dashboard/${params.storeId}/products`,
       active: pathname.includes(`/dashboard/${params.storeId}/products`),

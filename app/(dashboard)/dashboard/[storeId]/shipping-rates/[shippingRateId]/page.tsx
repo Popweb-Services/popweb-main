@@ -12,9 +12,9 @@ interface CreateShippingRatePageProps {
   }
 }
 
-const CreateShippingRatePage: React.FC<CreateShippingRatePageProps> = async ({
+const CreateShippingRatePage = async ({
   params,
-}) => {
+}:CreateShippingRatePageProps) => {
   let shippingRate
   try {
     shippingRate = await prismadb.shippingRate.findUnique({

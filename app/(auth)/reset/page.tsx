@@ -5,7 +5,7 @@ import ResetPasswordEmailForm from "@/components/reset-password-email-form"
 
 interface ResetPasswordPageProps {}
 
-const ResetPasswordPage: React.FC<ResetPasswordPageProps> = async ({}) => {
+const ResetPasswordPage = async ({}) => {
   const session = await getAuthSession()
   if (session?.user) {
     return redirect("/dashboard")

@@ -8,6 +8,7 @@ import {
   Category,
   Image as ImageType,
   Product,
+  ProductFeature,
   ProductOption,
   Variant,
 } from "@prisma/client"
@@ -18,6 +19,7 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { z } from "zod"
 
+import { priceFormatter } from "@/lib/formatter"
 import generateCombinations from "@/lib/generate-options-combinations"
 import { cn } from "@/lib/utils"
 import { createProductFormSchema } from "@/lib/validators/store-validators"
@@ -65,6 +67,7 @@ interface CreateProductFormProps {
         images: ImageType[]
         options: ProductOption[]
         variants: Variant[]
+        features: ProductFeature[]
       })
     | null
   categories: Category[]
@@ -95,7 +98,13 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
       name: product?.name ?? "",
       description: product?.description ?? undefined,
       category: product?.categoryId ?? undefined,
+      features:
+        product?.features.map((feature) => ({
+          name: feature.name,
+          value: feature.value,
+        })) ?? [],
       price: product?.price ?? 0,
+      isFeatured: product?.isFeatured,
       priceAfterDiscount: product?.priceAfterDiscount ?? undefined,
       unit: product?.unit ?? "",
       costAtPrice: product?.costAtPrice ?? undefined,
@@ -108,15 +117,18 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
             })),
           }))
         : [{ name: "", values: [{ value: "" }] }],
-      variants: product
-        ? product.variants.map((variant) => ({
-            options: variant.options,
-            price: variant.price ?? undefined,
-            quantity: variant.quantity,
-          }))
-        : [],
+      variants:
+        product?.variants.map((variant) => ({
+          options: variant.options,
+          price: variant.price ?? undefined,
+          priceAfterDiscount: variant.priceAfterDiscount ?? undefined,
+          quantity: variant.quantity,
+        })) ?? [],
     },
   })
+  const isFeatured = form.watch("isFeatured")
+  const price = form.watch("price")
+  const priceAfterDiscount = form.watch("priceAfterDiscount")
   const options = form.watch("options")
   const {
     fields: optionFields,
@@ -130,17 +142,30 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
     control: form.control,
     name: "variants",
   })
+  const {
+    fields: featureFields,
+    remove: removeFeature,
+    append: appendFeatrue,
+  } = useFieldArray({
+    control: form.control,
+    name: "features",
+  })
+  const variants = form.watch("variants")
+
   const imageUrls = form.watch("imageUrls")
   const { mutate: createOrUpdateProduct, isLoading } = useMutation({
     mutationFn: async (payload: z.infer<typeof createProductFormSchema>) => {
       const variants = payload.variants?.filter(
         (variant) => variant.price !== undefined
       )
-      const options = payload.options.filter((option) => option.name === "")
-      console.log(variants)
+      const options = payload.options.filter((option) => option.name !== "")
+      const features = payload.features?.filter(
+        (feature) => feature.name !== "" && feature.value !== ""
+      )
       if (product) {
         await axios.patch(`/api/${storeId}/products/${product.id}`, {
           ...payload,
+          features,
           variants,
           options,
         })
@@ -171,22 +196,22 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
   const onSubmit = (values: z.infer<typeof createProductFormSchema>) => {
     createOrUpdateProduct(values)
   }
-  useEffect(() => {
-    let output: { value: string }[][] = []
-    generateCombinations(
-      options.map((option) => option.values),
-      [],
-      output
-    )
-    form.setValue(
-      "variants",
-      output.map((item) => ({
-        options: item.map((value) => value.value),
-        price: undefined,
-        quantity: 0,
-      }))
-    )
-  }, [options])
+  // useEffect(() => {
+  //   let output: { value: string }[][] = []
+  //   generateCombinations(
+  //     options.map((option) => option.values),
+  //     [],
+  //     output
+  //   )
+  //   form.setValue(
+  //     "variants",
+  //     output.map((item) => ({
+  //       options: item.map((value) => value.value),
+  //       price: undefined,
+  //       quantity: 12,
+  //     }))
+  //   )
+  // }, [options])
   useEffect(() => {
     setIsMounted(true)
   }, [])
@@ -255,10 +280,10 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                             <FormControl>
                               <RadioGroupItem value={url} className="sr-only" />
                             </FormControl>
-                            <div className="w-[80px] h-[80px] border-[2px] rounded-md relative">
+                            <div className="w-full aspect-square border-[2px] rounded-md relative">
                               <Image
                                 alt="image"
-                                className="object-fit overflow-hidden rounded-md"
+                                className="object-cover overflow-hidden rounded-md"
                                 src={url}
                                 fill
                               />
@@ -345,7 +370,78 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                 </FormItem>
               )}
             />
+
+            {/* isFeatured */}
+            <FormField
+              control={form.control}
+              name="isFeatured"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="font-bold">
+                      نمایش در صفحه اصلی
+                    </FormLabel>
+                  </div>
+                  <FormDescription className="mr-4">
+                    با فعال بودن این گزینه ، محصول در صفحه اصلی فروشگاه نمایش
+                    داده خواهد شد.
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
             <Separator />
+            {/* Features */}
+            <div className="flex flex-col gap-y-2 p-4 border-2 rounded-xl">
+              <FormLabel className="text-lg font-bold">ویژگی ها</FormLabel>
+              <FormDescription>
+                با افزودن ویژگی امکانات محصول خود را شرح دهید
+              </FormDescription>
+              {featureFields.map((field, index) => (
+                <div className="flex items-center gap-x-2" key={field.id}>
+                  <FormItem>
+                    <div className="flex items-center justify-between"></div>
+                    <FormLabel className="font-semibold">نام ویژگی</FormLabel>
+                    <Input
+                      placeholder="مثال : جنس، اندازه"
+                      {...form.register(`features.${index}.name`)}
+                    />
+                  </FormItem>
+                  <FormItem>
+                    <div className="flex items-center justify-between"></div>
+                    <FormLabel className="font-semibold flex justify-between items-center">
+                      <p>مقدار ویژگی</p>
+                      {index > 0 && (
+                        <button
+                          onClick={() => removeFeature(index)}
+                          type="button"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </FormLabel>
+                    <Input
+                      placeholder="مثال : چرم ، بزرگ"
+                      {...form.register(`features.${index}.value`)}
+                    />
+                  </FormItem>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="text-sm flex items-center mt-2 gap-x-2 text-primaryPurple"
+                onClick={() => appendFeatrue({ name: "", value: "" })}
+              >
+                افزودن ویژگی
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+
             {/* PRICING */}
             <FormHeading title="قیمت گذاری" />
             <div className="grid grid-cols-2 gap-x-4">
@@ -395,7 +491,6 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                           {...field}
                           className="h-[44px]"
                           type="number"
-                          min={0}
                         />
                         <div className="absolute top-1/2 -translate-y-1/2 left-9 text-text">
                           تومان
@@ -516,6 +611,21 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                         type="button"
                         onClick={() => {
                           removeOption(index)
+                          let output: { value: string }[][] = []
+                          generateCombinations(
+                            options.map((option) => option.values),
+                            [],
+                            output
+                          )
+
+                          form.setValue(
+                            "variants",
+                            output.map((item) => ({
+                              options: item.map((value) => value.value),
+                              price: 0,
+                              quantity: 0,
+                            }))
+                          )
                         }}
                         variant="ghost"
                       >
@@ -543,11 +653,12 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                           [],
                           output
                         )
+
                         form.setValue(
                           "variants",
                           output.map((item) => ({
                             options: item.map((value) => value.value),
-                            price: undefined,
+                            price: 0,
                             quantity: 0,
                           }))
                         )
@@ -569,12 +680,15 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
               <p>افزودن گونه جدید</p>
               <Plus size={15} />
             </button>
-            {options[0].values[0].value !== "" && (
+            {options.length !== 0 && options[0].values[0].value !== "" && (
               <Table className="border-2 rounded-lg ">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[100px] text-right">گونه</TableHead>
                     <TableHead className=" text-right">قیمت</TableHead>
+                    <TableHead className=" text-right">
+                      قیمت بعد از تحفیف
+                    </TableHead>
                     <TableHead className=" text-right">تعداد</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -585,6 +699,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                       <TableCell>
                         <div className="relative">
                           <Input
+                            defaultValue={price}
                             disabled={isLoading}
                             {...form.register(`variants.${index}.price`)}
                             type="number"
@@ -596,7 +711,24 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                         </div>
                       </TableCell>
                       <TableCell>
+                        <div className="relative">
+                          <Input
+                            defaultValue={priceAfterDiscount ?? undefined}
+                            disabled={isLoading}
+                            {...form.register(
+                              `variants.${index}.priceAfterDiscount`
+                            )}
+                            type="number"
+                            min={0}
+                          />
+                          <div className="absolute top-1/2 -translate-y-1/2 left-9 text-text">
+                            تومان
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
                         <Input
+                          defaultValue={field.quantity}
                           disabled={isLoading}
                           {...form.register(`variants.${index}.quantity`)}
                           type="number"

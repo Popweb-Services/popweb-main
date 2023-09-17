@@ -9,7 +9,7 @@ import DashboardNavbar from "./components/dashboard-navbar"
 
 interface DashboardPageProps {}
 
-const DashboardPage: React.FC<DashboardPageProps> = async ({}) => {
+const DashboardPage = async ({}) => {
   const session = await getAuthSession()
   if (!session?.user.email) {
     redirect("/sign-in")

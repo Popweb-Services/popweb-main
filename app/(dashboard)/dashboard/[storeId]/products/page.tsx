@@ -8,13 +8,9 @@ import { buttonVariants } from "@/components/ui/button"
 import { ProductColumn } from "./components/columns"
 import CategoriesClient from "./components/products-client"
 
-interface ProductsPageProps {
-  params: {
-    storeId: string
-  }
-}
+interface ProductsPageProps {}
 
-const ProductsPage: React.FC<ProductsPageProps> = async ({ params }) => {
+const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
   const products = await prismadb.product.findMany({
     where: {
       storeId: params.storeId,

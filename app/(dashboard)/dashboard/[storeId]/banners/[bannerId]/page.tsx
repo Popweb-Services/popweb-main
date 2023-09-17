@@ -5,16 +5,14 @@ import { Separator } from "@/components/ui/separator"
 
 import CreateCategoryForm from "../components/create-banner-form"
 
-interface CreateCategoryPageProps {
+interface CreateBannerPageProps {
   params: {
     storeId: string
     bannerId: string
   }
 }
 
-const CreateCategoryPage: React.FC<CreateCategoryPageProps> = async ({
-  params,
-}) => {
+const CreateBannerPage = async ({ params }: CreateBannerPageProps) => {
   let banner
   try {
     banner = await prismadb.banner.findUnique({
@@ -27,12 +25,10 @@ const CreateCategoryPage: React.FC<CreateCategoryPageProps> = async ({
   }
   return (
     <>
-      <CreateCategoryForm
-        storeId={params.storeId}
-        banner={banner}
-      />
+      {/* @ts-ignore */}
+      <CreateCategoryForm storeId={params.storeId} banner={banner} />
     </>
   )
 }
 
-export default CreateCategoryPage
+export default CreateBannerPage

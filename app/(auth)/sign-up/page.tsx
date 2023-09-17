@@ -5,7 +5,7 @@ import SignUpForm from "@/components/sign-up-form"
 
 interface SignUpPageProps {}
 
-const SignUpPage: React.FC<SignUpPageProps> = async ({}) => {
+const SignUpPage = async ({}) => {
   const session = await getAuthSession()
   if (session?.user) {
     redirect("/dashboard")

@@ -11,9 +11,9 @@ interface StoreOverviewPageProps {
   }
 }
 
-const StoreOverviewPage: React.FC<StoreOverviewPageProps> = async ({
+const StoreOverviewPage = async ({
   params,
-}) => {
+}:StoreOverviewPageProps) => {
   const session = await getAuthSession()
   if (!session?.user) {
     return redirect("/sign-in")

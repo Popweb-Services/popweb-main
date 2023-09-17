@@ -10,9 +10,7 @@ interface DashboardLayoutProps {
   children: ReactNode
 }
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
-  children,
-}) => {
+const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   const session = await getAuthSession()
   if (!session) {
     return redirect("/sign-in")
@@ -25,9 +23,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
   if (!user) {
     return redirect("/sign-in")
   }
+  const stores = await prismadb.store.findMany({
+    where: {
+      userId: user.id,
+    },
+  })
   return (
     <>
-      <DashboardNavbar user={user} />
+      <DashboardNavbar stores={stores} user={user} />
       {children}
     </>
   )

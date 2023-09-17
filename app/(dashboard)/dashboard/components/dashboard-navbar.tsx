@@ -1,21 +1,18 @@
-import { User } from "@prisma/client"
+import { Store, User } from "@prisma/client"
 
 import prismadb from "@/lib/prismadb"
 import DashboardMainNav from "@/components/dashboard-main-nav"
+import SettingsButton from "@/components/settings-button"
 import StoreSwitcher from "@/components/store-switcher"
 
 import UserAccountNav from "./user-account-nav"
 
 interface DashboardNavbarProps {
   user: User
+  stores:Store[]
 }
 
-const DashboardNavbar: React.FC<DashboardNavbarProps> = async ({ user }) => {
-  const stores = await prismadb.store.findMany({
-    where: {
-      userId: user.id,
-    },
-  })
+const DashboardNavbar = ({ user,stores }:DashboardNavbarProps) => {
   return (
     <>
       <div className="w-full h-12 bg-white border-b fixed z-30">
@@ -25,6 +22,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = async ({ user }) => {
             <DashboardMainNav />
           </div>
           <div className="flex items-center gap-x-3">
+            <SettingsButton />
             <UserAccountNav user={user} />
           </div>
         </div>

@@ -12,9 +12,7 @@ interface VerifySuccessPageProps {
   }
 }
 
-const VerifySuccessPage: React.FC<VerifySuccessPageProps> = async ({
-  params,
-}) => {
+const VerifySuccessPage = async ({ params }: VerifySuccessPageProps) => {
   const session = await getAuthSession()
   if (!session?.user) {
     return redirect("/sign-in")

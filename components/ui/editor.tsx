@@ -31,8 +31,9 @@ const Editor: React.FC<EditorProps> = ({ onChange, initialContent }) => {
 
     if (!editorRef.current) {
       const editor = new EditorJS({
-        onChange: () => {
-          const blocks = editorRef.current?.save
+        onChange: async () => {
+          const blocks = await editorRef.current?.save()
+
           onChange(blocks)
         },
         holder: "editor",

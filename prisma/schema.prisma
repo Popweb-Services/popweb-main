@@ -24,19 +24,38 @@ model User {
   updatedAt       DateTime @updatedAt
 }
 
+model Customer {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  phone     String
+  hashedOTP String
+  storeId   String     @db.ObjectId
+  store     Store      @relation(fields: [storeId], references: [id])
+  cartItem  CartItem[]
+
+  @@unique([storeId, phone], name: "customerIdentifier")
+}
+
 model Store {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  isTest        Boolean        @default(false)
-  userId        String         @db.ObjectId
-  user          User           @relation("StoreToUser", fields: [userId], references: [id])
-  categories    Category[]     @relation("CategoryToStore")
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  shippingRates ShippingRate[] @relation("ShippingRateToStore")
-  banners       Banner[]       @relation("BannerToStore")
-  bannerId      String?
-  products      Product[]      @relation("ProductToStore")
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String?
+  logoUrl        String?
+  isTest         Boolean         @default(false)
+  userId         String          @db.ObjectId
+  user           User            @relation("StoreToUser", fields: [userId], references: [id])
+  categories     Category[]      @relation("CategoryToStore")
+  themeColor     String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  shippingRates  ShippingRate[]  @relation("ShippingRateToStore")
+  banners        Banner[]        @relation("BannerToStore")
+  bannerId       String?
+  products       Product[]       @relation("ProductToStore")
+  productOptions ProductOption[]
+  variants       Variant[]
+  customers      Customer[]
+  cartItem       CartItem[]
 }
 
 model Category {
@@ -81,25 +100,29 @@ model Banner {
 }
 
 model Product {
-  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
   name               String
   description        Json?
   quantity           Int
-  price              Int?
+  price              Int
   priceAfterDiscount Int?
   costAtPrice        Int?
   unit               String?
+  features           ProductFeature[]
   options            ProductOption[]
   variants           Variant[]
-  storeId            String          @db.ObjectId
-  store              Store           @relation("ProductToStore", fields: [storeId], references: [id])
+  storeId            String           @db.ObjectId
+  store              Store            @relation("ProductToStore", fields: [storeId], references: [id])
   mainImageUrl       String
-  categoryId         String?         @db.ObjectId
-  category           Category?       @relation(fields: [categoryId], references: [id])
+  categoryId         String?          @db.ObjectId
+  category           Category?        @relation(fields: [categoryId], references: [id])
   images             Image[]
-  isArchived         Boolean         @default(false)
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
+  isDiscounted       Boolean          @default(false)
+  isFeatured         Boolean          @default(false)
+  isArchived         Boolean          @default(false)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  cartItem           CartItem[]
 }
 
 model Image {
@@ -113,15 +136,46 @@ model ProductOption {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   values    String[]
+  storeId   String   @db.ObjectId
+  store     Store    @relation(fields: [storeId], references: [id])
   product   Product? @relation(fields: [productId], references: [id])
   productId String?  @db.ObjectId
 }
 
 model Variant {
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  options            String[]
+  price              Int
+  priceAfterDiscount Int?
+  quantity           Int
+  storeId            String     @db.ObjectId
+  store              Store      @relation(fields: [storeId], references: [id])
+  product            Product?   @relation(fields: [productId], references: [id])
+  productId          String?    @db.ObjectId
+  cartItem           CartItem[]
+}
+
+model ProductFeature {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  options   String[]
-  price     Int?
-  quantity  Int
+  name      String
+  value     String
   product   Product? @relation(fields: [productId], references: [id])
   productId String?  @db.ObjectId
+}
+
+model CartItem {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  product    Product   @relation(fields: [productId], references: [id])
+  productId  String    @db.ObjectId
+  variant    Variant?  @relation(fields: [variantId], references: [id])
+  variantId  String?   @db.ObjectId
+  quantity   Int
+  deviceId   String?
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId String?   @db.ObjectId
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  store      Store     @relation(fields: [storeId], references: [id])
+
+  storeId String @db.ObjectId
 }

@@ -9,9 +9,7 @@ import VerifyEmailClient from "./components/verify-email-client"
 
 interface EmailConfirmationPageProps {}
 
-const EmailConfirmationPage: React.FC<
-  EmailConfirmationPageProps
-> = async ({}) => {
+const EmailConfirmationPage = async ({}) => {
   const session = await getAuthSession()
   if (!session?.user.email) {
     return redirect("/sign-in")
@@ -27,7 +25,7 @@ const EmailConfirmationPage: React.FC<
 
   return (
     <>
-    <VerifyEmailClient userEmail={user?.email!} />
+      <VerifyEmailClient userEmail={user?.email!} />
     </>
   )
 }

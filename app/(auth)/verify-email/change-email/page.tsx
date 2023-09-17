@@ -5,7 +5,7 @@ import ChangeEmailForm from "@/components/change-email-form"
 
 interface ChangeEmailPageProps {}
 
-const ChangeEmailPage: React.FC<ChangeEmailPageProps> = async ({}) => {
+const ChangeEmailPage = async ({}) => {
   const session = await getAuthSession()
   if (!session?.user) {
     return redirect("/sign-in")

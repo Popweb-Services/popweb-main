@@ -10,7 +10,15 @@ interface IParams {
     storeId: string
   }
 }
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+}
 
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders })
+}
 export async function POST(request: Request, { params }: IParams) {
   try {
     const session = await getAuthSession()
@@ -28,8 +36,6 @@ export async function POST(request: Request, { params }: IParams) {
     await prismadb.category.create({
       data: {
         name,
-        bannerId,
-        parentCategoryId: parent === "no-parent" ? undefined : parent,
         storeId: params.storeId,
       },
     })
@@ -48,9 +54,14 @@ export async function GET(_request: Request, { params }: IParams) {
     const categories = await prismadb.category.findMany({
       where: {
         storeId: params.storeId,
+        parentCategory: undefined,
+      },
+      include: {
+        subcategories: true,
       },
     })
-    return NextResponse.json(categories, { status: 200 })
+
+    return NextResponse.json(categories, { status: 200, headers: corsHeaders })
   } catch (error) {
     console.log("[CATEGORIES_GET]", error)
     return new NextResponse("Internal Server Error", { status: 500 })

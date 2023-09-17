@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
-import AWS from "aws-sdk"
-import sharp from "sharp"
-import { v4 as uuid } from "uuid"
-import { z } from "zod"
 
-import prismadb from "@/lib/prismadb"
-import { getAuthSession } from "@/lib/session"
-import { deleteFileValidator } from "@/lib/validators/upload"
+import { v4 as uuid } from "uuid"
+
+
 import s3Client from "@/lib/s3-client"
+
 
 interface IParams {
   params: {
@@ -15,13 +12,11 @@ interface IParams {
   }
 }
 
-
-
 async function uploadImageToS3(
   file: Buffer,
   fileName: string
 ): Promise<string> {
-  const resizedImageBuffer = await sharp(file).toBuffer()
+  const resizedImageBuffer = Buffer.from(file)
 
   const params = {
     Bucket: process.env.BUCKET_NAME as string,
@@ -60,4 +55,3 @@ export async function POST(request: NextRequest, response: NextResponse) {
     NextResponse.json({ message: "Error uploading image" })
   }
 }
-
