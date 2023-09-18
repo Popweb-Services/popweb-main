@@ -7,7 +7,7 @@ import { addToCartValidator } from "@/lib/validators/cart-validators"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Methods": "GET,PATCH ,POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 }
 
@@ -146,5 +146,29 @@ export async function DELETE(request: Request) {
       status: 500,
       headers: corsHeaders,
     })
+  }
+}
+
+export async function PATCH(request:Request) {
+  try{
+    const {searchParams} = new URL(request.url)
+    const deviceId = searchParams.get('deviceId')
+    const customerId = searchParams.get('customerId')
+    console.log(deviceId,customerId)
+    if(!customerId || !deviceId){
+      return new NextResponse('invalid request data passed',{status:400,headers:corsHeaders})
+    }
+    await prismadb.cartItem.updateMany({
+      where:{
+        deviceId
+      },data:{
+        customerId,
+        deviceId:null
+      }
+    })
+    return new NextResponse('cart items updated',{status:200,headers:corsHeaders})
+  }catch(error){
+    console.log('[CART_PATCH]',error)
+    return new NextResponse('internal server error',{status:500,headers:corsHeaders})
   }
 }
