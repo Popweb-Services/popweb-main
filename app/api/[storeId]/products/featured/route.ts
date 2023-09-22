@@ -8,7 +8,10 @@ interface IParams {
   }
 }
 
-export async function GET(request: Request, { params }: IParams) {
+export async function GET(
+  request: Request,
+  { params }: IParams
+): Promise<NextResponse> {
   try {
     if (!params.storeId) {
       return new NextResponse("invalid store id", { status: 400 })
@@ -26,5 +29,6 @@ export async function GET(request: Request, { params }: IParams) {
     return NextResponse.json(products, { status: 200 })
   } catch (error) {
     console.log("[PRODUCTS_GET]", error)
+    return new NextResponse("internal server error", { status: 500 })
   }
 }

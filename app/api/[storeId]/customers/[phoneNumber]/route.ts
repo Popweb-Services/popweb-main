@@ -18,7 +18,7 @@ export async function OPTIONS() {
 export async function POST(
   request: Request,
   { params }: { params: { storeId: string; phoneNumber: string } }
-) {
+): Promise<NextResponse> {
   try {
     const body = await request.json()
     const { code } = customerAuthenticationValidator.parse(body)
@@ -46,6 +46,7 @@ export async function POST(
     return NextResponse.json(customer, { status: 200, headers: corsHeaders })
   } catch (error) {
     console.log(error)
+    return new NextResponse("internal server error", { status: 500 })
   }
 }
 

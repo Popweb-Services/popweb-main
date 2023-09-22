@@ -25,15 +25,30 @@ model User {
 }
 
 model Customer {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  name      String?
-  phone     String
-  hashedOTP String
-  storeId   String     @db.ObjectId
-  store     Store      @relation(fields: [storeId], references: [id])
-  cartItem  CartItem[]
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  phone           String
+  hashedOTP       String
+  storeId         String            @db.ObjectId
+  store           Store             @relation(fields: [storeId], references: [id])
+  cartItem        CartItem[]
+  customerAddress CustomerAddress[]
 
   @@unique([storeId, phone], name: "customerIdentifier")
+}
+
+model CustomerAddress {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  address             String
+  province            String
+  city                String
+  postCode            String
+  recieverName        String
+  recieverPhoneNumber String
+  customer            Customer @relation(fields: [customerId], references: [id])
+  customerId          String   @db.ObjectId
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt()
 }
 
 model Store {
@@ -130,6 +145,8 @@ model Image {
   imageUrl  String
   product   Product? @relation(fields: [productId], references: [id])
   productId String?  @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProductOption {
@@ -140,6 +157,8 @@ model ProductOption {
   store     Store    @relation(fields: [storeId], references: [id])
   product   Product? @relation(fields: [productId], references: [id])
   productId String?  @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Variant {
@@ -153,6 +172,8 @@ model Variant {
   product            Product?   @relation(fields: [productId], references: [id])
   productId          String?    @db.ObjectId
   cartItem           CartItem[]
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 }
 
 model ProductFeature {
@@ -161,6 +182,8 @@ model ProductFeature {
   value     String
   product   Product? @relation(fields: [productId], references: [id])
   productId String?  @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model CartItem {

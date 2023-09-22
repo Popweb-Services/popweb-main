@@ -11,7 +11,10 @@ interface IParams {
   }
 }
 
-export async function POST(request: Request, { params }: IParams) {
+export async function POST(
+  request: Request,
+  { params }: IParams
+): Promise<NextResponse> {
   try {
     const session = await getAuthSession()
     if (!session?.user) {
@@ -100,7 +103,10 @@ export async function POST(request: Request, { params }: IParams) {
   }
 }
 
-export async function GET(request: Request, { params }: IParams) {
+export async function GET(
+  request: Request,
+  { params }: IParams
+): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(request.url)
     const categoryId = searchParams.get("categoryId")
@@ -122,5 +128,6 @@ export async function GET(request: Request, { params }: IParams) {
     return NextResponse.json(products, { status: 200 })
   } catch (error) {
     console.log("[PRODUCTS_GET]", error)
+    return new NextResponse("internal server error", { status: 500 })
   }
 }

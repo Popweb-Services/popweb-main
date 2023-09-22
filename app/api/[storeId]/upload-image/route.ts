@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-
 import { v4 as uuid } from "uuid"
 
-
 import s3Client from "@/lib/s3-client"
-
 
 interface IParams {
   params: {
@@ -32,7 +29,10 @@ async function uploadImageToS3(
   return fileName
 }
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(
+  request: NextRequest,
+  response: NextResponse
+): Promise<NextResponse> {
   try {
     const formData = await request.formData()
     const file = formData.get("file") as Blob | null
@@ -52,6 +52,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
     return NextResponse.json({ success: true, url })
   } catch (error) {
     console.error("Error uploading image:", error)
-    NextResponse.json({ message: "Error uploading image" })
+    return new NextResponse("internal server error", { status: 500 })
   }
 }

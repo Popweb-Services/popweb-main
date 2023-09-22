@@ -50,7 +50,10 @@ export async function PATCH(request: Request, { params }: IParams) {
   }
 }
 
-export async function DELETE(_request: Request, { params }: IParams) {
+export async function DELETE(
+  _request: Request,
+  { params }: IParams
+): Promise<NextResponse> {
   try {
     const session = await getAuthSession()
     if (!session?.user) {
@@ -91,5 +94,6 @@ export async function GET(request: Request, { params }: IParams) {
     return NextResponse.json(banner)
   } catch (error) {
     console.log("[BANNER_GET]", error)
+    return new NextResponse("internal server error", { status: 500 })
   }
 }

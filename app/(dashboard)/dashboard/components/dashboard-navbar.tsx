@@ -9,20 +9,20 @@ import UserAccountNav from "./user-account-nav"
 
 interface DashboardNavbarProps {
   user: User
-  stores:Store[]
+  stores: Store[]
 }
 
-const DashboardNavbar = ({ user,stores }:DashboardNavbarProps) => {
+const DashboardNavbar = ({ user, stores }: DashboardNavbarProps) => {
   return (
     <>
       <div className="w-full h-12 bg-white border-b fixed z-30">
         <div className="container h-full mx-auto flex items-center justify-between">
           <div className="flex items-center gap-x-8">
             <StoreSwitcher stores={stores} />
-            <DashboardMainNav />
+            {stores.length > 0 && <DashboardMainNav />}
           </div>
           <div className="flex items-center gap-x-3">
-            <SettingsButton />
+            {stores.length > 0 && <SettingsButton />}
             <UserAccountNav user={user} />
           </div>
         </div>

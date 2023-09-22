@@ -16,7 +16,7 @@ export async function PATCH(
   { params }: { params: { storeId: string; cartItemId: string } }
 ) {
   try {
-    await prismadb.cartItem.update({
+    const cartItem = await prismadb.cartItem.update({
       where: {
         id: params.cartItemId,
       },
@@ -24,6 +24,13 @@ export async function PATCH(
         quantity: { decrement: 1 },
       },
     })
+    if(cartItem.quantity === 0 ){
+        await prismadb.cartItem.delete({
+            where:{
+                id:cartItem.id
+            }
+        })
+    }
     return new NextResponse("cart item quantity updated", {
       status: 200,
       headers: corsHeaders,

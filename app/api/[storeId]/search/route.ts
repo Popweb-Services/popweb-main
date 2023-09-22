@@ -14,7 +14,7 @@ export async function OPTIONS() {
 export async function GET(
   request: Request,
   { params }: { params: { storeId: string } }
-) {
+): Promise<NextResponse> {
   try {
     const url = new URL(request.url)
     const queryParam = url.searchParams.get("query")
@@ -47,5 +47,6 @@ export async function GET(
     return NextResponse.json(results, { status: 200, headers: corsHeaders })
   } catch (error) {
     console.log("[SEARCH_GET]", error)
+    return new NextResponse("internal server error", { status: 500 })
   }
 }

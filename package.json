@@ -60,13 +60,13 @@
     "aws-sdk": "^2.1436.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.1",
-    "class-variance-authority": "^0.4.0",
+    "class-variance-authority": "^0.7.0",
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "jsonwebtoken": "^9.0.1",
     "lucide-react": "0.105.0-alpha.4",
     "melipayamak": "^1.0.5",
-    "next": "^13.4.8",
+    "next": "^13.5.2",
     "next-auth": "^4.22.3",
     "next-themes": "^0.2.1",
     "nextjs-toploader": "^1.4.2",
@@ -101,7 +101,6 @@
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "prisma": "^5.3.1",
-    "tailwindcss": "^3.3.3",
-    "typescript": "^5.2.2"
+    "tailwindcss": "^3.3.3"
   }
 }

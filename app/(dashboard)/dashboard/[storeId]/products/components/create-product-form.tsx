@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useTransition } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,7 +16,8 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { Plus, Trash, Trash2 } from "lucide-react"
 import { useFieldArray, useForm } from "react-hook-form"
-import { ImSpinner8 } from "react-icons/im"
+import { ImSpinner8, ImWarning } from "react-icons/im"
+import Balancer from "react-wrap-balancer"
 import { z } from "zod"
 
 import { priceFormatter } from "@/lib/formatter"
@@ -80,6 +81,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
   storeId,
 }) => {
   const [isMounted, setIsMounted] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const actionLabel = product ? "ویرایش محصول" : "ایجاد محصول جدید"
   const formTitle = product ? "ویرایش محصول" : "ایجاد محصول"
   const toastTilte = product ? "ویرایش محصول" : "ایجاد محصول"
@@ -196,22 +198,19 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
   const onSubmit = (values: z.infer<typeof createProductFormSchema>) => {
     createOrUpdateProduct(values)
   }
-  // useEffect(() => {
-  //   let output: { value: string }[][] = []
-  //   generateCombinations(
-  //     options.map((option) => option.values),
-  //     [],
-  //     output
-  //   )
-  //   form.setValue(
-  //     "variants",
-  //     output.map((item) => ({
-  //       options: item.map((value) => value.value),
-  //       price: undefined,
-  //       quantity: 12,
-  //     }))
-  //   )
-  // }, [options])
+  useEffect(() => {
+    if (product) {
+      form.setValue(
+        "variants",
+        product.variants.map((variant) => ({
+          options: variant.options,
+          price: variant.price,
+          quantity: variant.quantity,
+          priceAfterDiscount: variant.priceAfterDiscount ?? 0,
+        }))
+      )
+    }
+  }, [])
   useEffect(() => {
     setIsMounted(true)
   }, [])
@@ -274,7 +273,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                       defaultValue={field.value}
                       className="grid max-w-full grid-cols-7 pt-2"
                     >
-                      {imageUrls.map((url) => (
+                      {imageUrls.map((url: string) => (
                         <FormItem>
                           <FormLabel className="[&:has([data-state=checked])>div]:border-primaryPurple">
                             <FormControl>
@@ -326,7 +325,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                   <FormControl>
                     <Editor
                       initialContent={field.value}
-                      onChange={(content: any) => field.onChange(content)}
+                      onChange={(content) => field.onChange(content)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -597,6 +596,15 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
             />
             <Separator />
             {/* VARIANTS */}
+            {product && (
+              <div className="w-full p-4 rounded-lg bg-rose-50 border border-rose-500 flex gap-x-4">
+                <ImWarning className="w-6 h-6 text-rose-500" />
+                <p className="text-rose-500">
+                  در صورت اضافه کردن یا ویرایش گونه و مقدار گونه ها باید قیمت ،
+                  قیمت بعد از تخفیف و تعداد گونه های محصول ریست خواهد شد.
+                </p>
+              </div>
+            )}
             <FormHeading
               title="گونه ها"
               description="برای محصول خود گونه هایی مانند رنگ سایز و ... تعریف کنید."
@@ -608,9 +616,12 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                     نام گونه
                     {index > 0 && (
                       <Button
+                        className="text-rose-500"
                         type="button"
                         onClick={() => {
-                          removeOption(index)
+                          // removeOption(index)
+                          const newOptions = options.splice(index, 1)
+                          form.setValue("options", newOptions)
                           let output: { value: string }[][] = []
                           generateCombinations(
                             options.map((option) => option.values),
@@ -623,6 +634,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                             output.map((item) => ({
                               options: item.map((value) => value.value),
                               price: 0,
+                              priceAfterDiscount: 0,
                               quantity: 0,
                             }))
                           )
@@ -649,7 +661,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                       onChange={() => {
                         let output: { value: string }[][] = []
                         generateCombinations(
-                          options.map((option) => option.values),
+                          options.map((option: any) => option.values),
                           [],
                           output
                         )
@@ -659,6 +671,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                           output.map((item) => ({
                             options: item.map((value) => value.value),
                             price: 0,
+                            priceAfterDiscount: 0,
                             quantity: 0,
                           }))
                         )
@@ -699,7 +712,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                       <TableCell>
                         <div className="relative">
                           <Input
-                            defaultValue={price}
+                            defaultValue={0}
                             disabled={isLoading}
                             {...form.register(`variants.${index}.price`)}
                             type="number"
@@ -713,7 +726,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
                       <TableCell>
                         <div className="relative">
                           <Input
-                            defaultValue={priceAfterDiscount ?? undefined}
+                            defaultValue={0}
                             disabled={isLoading}
                             {...form.register(
                               `variants.${index}.priceAfterDiscount`
