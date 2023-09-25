@@ -47,6 +47,7 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
         <ul className="flex items-center justify-start gap-x-1">
           {routes.map((route) => (
             <li
+              key={route.href}
               className={cn(
                 "py-1 px-3 text-sm font-semibold transition-colors cursor-pointer rounded-full",
                 route.active
