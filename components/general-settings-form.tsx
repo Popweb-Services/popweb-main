@@ -57,7 +57,7 @@ const GeneralSettingsForm: React.FC<GeneralSettingsFormProps> = ({
       logoUrl: store?.logoUrl ?? "",
       name: store?.name ?? "",
       description: store?.description ?? "",
-      bannerId: store?.bannerId ?? "",
+      bannerUrl: store?.bannerUrl ?? "",
       themeColor: store?.themeColor ?? "",
     },
   })
@@ -157,7 +157,7 @@ const GeneralSettingsForm: React.FC<GeneralSettingsFormProps> = ({
           />
           <FormField
             control={form.control}
-            name="bannerId"
+            name="bannerUrl"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md flex items-center gap-x-2 font-semibold">
@@ -185,7 +185,7 @@ const GeneralSettingsForm: React.FC<GeneralSettingsFormProps> = ({
                   <SelectContent>
                     {banners.map((banner) => (
                       <SelectItem
-                        value={banner.id}
+                        value={banner.imageUrl}
                         className="h-[80px] cursor-pointer"
                       >
                         <div dir="rtl" className="flex items-center gap-x-2">

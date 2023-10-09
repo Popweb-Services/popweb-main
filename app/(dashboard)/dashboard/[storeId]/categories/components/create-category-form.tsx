@@ -167,9 +167,7 @@ const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
                           {category.name}
                         </SelectItem>
                       ))}
-                      <SelectItem value="no-parent">
-                        بدون دسته بندی پدر
-                      </SelectItem>
+                      <SelectItem value="">بدون دسته بندی پدر</SelectItem>
                     </SelectContent>
                   </Select>
 

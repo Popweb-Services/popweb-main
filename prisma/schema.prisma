@@ -19,6 +19,7 @@ model User {
   isEmailVerified Boolean  @default(false)
   hashedPassword  String
   hasUsedTrial    Boolean  @default(false)
+  firstTimeBuying Boolean  @default(true)
   store           Store[]  @relation("StoreToUser")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -33,6 +34,7 @@ model Customer {
   store           Store             @relation(fields: [storeId], references: [id])
   cartItem        CartItem[]
   customerAddress CustomerAddress[]
+  order           Order[]
 
   @@unique([storeId, phone], name: "customerIdentifier")
 }
@@ -49,28 +51,34 @@ model CustomerAddress {
   customerId          String   @db.ObjectId
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt()
+  order               Order[]
 }
 
 model Store {
-  id             String          @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  description    String?
-  logoUrl        String?
-  isTest         Boolean         @default(false)
-  userId         String          @db.ObjectId
-  user           User            @relation("StoreToUser", fields: [userId], references: [id])
-  categories     Category[]      @relation("CategoryToStore")
-  themeColor     String?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  shippingRates  ShippingRate[]  @relation("ShippingRateToStore")
-  banners        Banner[]        @relation("BannerToStore")
-  bannerId       String?
-  products       Product[]       @relation("ProductToStore")
-  productOptions ProductOption[]
-  variants       Variant[]
-  customers      Customer[]
-  cartItem       CartItem[]
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  description       String?
+  logoUrl           String?
+  isTest            Boolean         @default(false)
+  userId            String          @db.ObjectId
+  user              User            @relation("StoreToUser", fields: [userId], references: [id])
+  categories        Category[]      @relation("CategoryToStore")
+  themeColor        String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  shippingRates     ShippingRate[]  @relation("ShippingRateToStore")
+  banners           Banner[]        @relation("BannerToStore")
+  bannerUrl         String?
+  products          Product[]       @relation("ProductToStore")
+  productOptions    ProductOption[]
+  variants          Variant[]
+  customers         Customer[]
+  cartItem          CartItem[]
+  order             Order[]
+  trialStart        DateTime?
+  trialEnd          DateTime?
+  subscriptionStart DateTime?
+  subscriptionEnd   DateTime?
 }
 
 model Category {
@@ -100,6 +108,7 @@ model ShippingRate {
   store       Store    @relation("ShippingRateToStore", fields: [storeId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  order       Order[]
 }
 
 model Banner {
@@ -200,5 +209,25 @@ model CartItem {
   updatedAt  DateTime  @updatedAt
   store      Store     @relation(fields: [storeId], references: [id])
 
-  storeId String @db.ObjectId
+  storeId String  @db.ObjectId
+  order   Order?  @relation(fields: [orderId], references: [id])
+  orderId String? @db.ObjectId
+}
+
+model Order {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  customer          Customer        @relation(fields: [customerId], references: [id])
+  cartItems         CartItem[]
+  cartItemIds       String[]
+  address           CustomerAddress @relation(fields: [customerAddressId], references: [id])
+  isPaid            Boolean         @default(false)
+  hasSent           Boolean         @default(false)
+  customerAddressId String          @db.ObjectId
+  shipping          ShippingRate    @relation(fields: [shippingRateId], references: [id])
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  shippingRateId    String          @db.ObjectId
+  customerId        String          @db.ObjectId
+  store             Store           @relation(fields: [storeId], references: [id])
+  storeId           String          @db.ObjectId
 }

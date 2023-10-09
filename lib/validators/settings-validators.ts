@@ -14,7 +14,7 @@ export const generalSettingsValidator = z.object({
         "برای بهینه سازی بهتر در موتور های جستجو (SEO) توضیحات باید کمتر از 170 کاراکتر باشد",
     })
     .optional(),
-  bannerId: z.string().optional(),
+  bannerUrl: z.string().optional(),
   themeColor: z.string().optional(),
 })
 

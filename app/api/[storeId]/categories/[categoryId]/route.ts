@@ -11,7 +11,15 @@ interface IParams {
     categoryId: string
   }
 }
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+}
 
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders })
+}
 export async function PATCH(request: Request, { params }: IParams) {
   try {
     const session = await getAuthSession()
@@ -36,6 +44,7 @@ export async function PATCH(request: Request, { params }: IParams) {
         parentCategoryId: parent,
       },
     })
+
     return new NextResponse("Category Updated", { status: 200 })
   } catch (error) {
     console.log(error)
@@ -70,5 +79,28 @@ export async function DELETE(request: Request, { params }: IParams) {
   } catch (error) {
     console.log(error)
     return new NextResponse("Internal sever error", { status: 500 })
+  }
+}
+
+export async function GET(
+  request: Request,
+  { params }: IParams
+): Promise<NextResponse> {
+  try {
+    const category = await prismadb.category.findUnique({
+      where: {
+        id: params.categoryId,
+      },
+      include: {
+        subcategories: true,
+      },
+    })
+    return NextResponse.json(category, { status: 200 })
+  } catch (error) {
+    console.log("[CATEGORY_GET]", error)
+    return new NextResponse("internal server error", {
+      status: 500,
+      headers: corsHeaders,
+    })
   }
 }

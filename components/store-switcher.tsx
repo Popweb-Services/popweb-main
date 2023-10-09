@@ -2,13 +2,15 @@
 
 import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { Store } from "@prisma/client"
+import { Store, User } from "@prisma/client"
 import { CommandEmpty } from "cmdk"
 import { Check, ChevronsUpDown, PlusCircle } from "lucide-react"
 import { PiStorefront } from "react-icons/pi"
 
 import { cn } from "@/lib/utils"
 import useCreateStoreModal from "@/hooks/use-create-store-modal"
+import usePaymentModal from "@/hooks/use-payment-modal"
+import useSelectSubscriptionModal from "@/hooks/use-select-subscription-modal"
 import {
   Command,
   CommandGroup,
@@ -28,10 +30,12 @@ import { Button } from "./ui/button"
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
 interface StoreSwitcherProps extends PopoverTriggerProps {
+  user: User
   stores: Store[]
 }
 
 const StoreSwitcher: React.FC<StoreSwitcherProps> = ({
+  user,
   className,
   stores = [],
 }) => {
@@ -49,7 +53,7 @@ const StoreSwitcher: React.FC<StoreSwitcherProps> = ({
   )
 
   const [open, setOpen] = useState<boolean>(false)
-
+  const selectSubscriptionModal = useSelectSubscriptionModal()
   const onStoreSelect = (store: { value: string; label: string }) => {
     setOpen(false)
     router.push(`/dashboard/${store.value}`)
@@ -105,7 +109,11 @@ const StoreSwitcher: React.FC<StoreSwitcherProps> = ({
               <CommandItem
                 onSelect={() => {
                   setOpen(false)
-                  createStoreModal.onOpen()
+                  if (user.hasUsedTrial) {
+                    selectSubscriptionModal.onOpen()
+                  } else {
+                    createStoreModal.onOpen()
+                  }
                 }}
                 className="cursor-pointer"
               >

@@ -37,8 +37,10 @@ export async function POST(request: Request, { params }: IParams) {
       data: {
         name,
         storeId: params.storeId,
+        parentCategoryId: parent?.length === 0 ? null : parent,
       },
     })
+
     return new NextResponse("Category created", { status: 200 })
   } catch (error) {
     console.log("[CATEGORIES_POST]", error)
@@ -54,14 +56,23 @@ export async function GET(_request: Request, { params }: IParams) {
     const categories = await prismadb.category.findMany({
       where: {
         storeId: params.storeId,
-        parentCategory: undefined,
+        isArchived: false,
       },
       include: {
-        subcategories: true,
+        subcategories: {
+          include: {
+            subcategories: true,
+          },
+        },
       },
     })
-
-    return NextResponse.json(categories, { status: 200, headers: corsHeaders })
+    const formattedCategories = categories.filter(
+      (category) => category.parentCategoryId === null || undefined
+    )
+    return NextResponse.json(formattedCategories, {
+      status: 200,
+      headers: corsHeaders,
+    })
   } catch (error) {
     console.log("[CATEGORIES_GET]", error)
     return new NextResponse("Internal Server Error", { status: 500 })

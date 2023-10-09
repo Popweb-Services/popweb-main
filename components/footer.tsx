@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { Balancer } from "react-wrap-balancer"
 
@@ -29,10 +30,17 @@ const Footer: React.FC<FooterProps> = ({}) => {
             <ul className="flex flex-col gap-y-2">
               {siteConfig.mainNav.map((route) => (
                 <li>
-                  <Link className="hover:opacity-50 transition-opacity" href={route.href}>{route.label}</Link>
+                  <Link
+                    className="hover:opacity-50 transition-opacity"
+                    href={route.href}
+                  >
+                    {route.label}
+                  </Link>
                 </li>
               ))}
             </ul>
+          </div>
+          <div className="aspect-square w-[100px] border">
           </div>
         </div>
       </footer>

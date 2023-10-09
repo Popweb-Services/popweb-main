@@ -1,6 +1,6 @@
-import AWS from "aws-sdk"
+import { S3 } from "@aws-sdk/client-s3";
 
-const s3Client = new AWS.S3({
+const s3Client = new S3({
   region: "default",
   endpoint: process.env.BUCKET_ENDPOINT,
   credentials: {

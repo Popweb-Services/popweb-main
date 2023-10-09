@@ -35,7 +35,7 @@ export async function PATCH(
       })
     }
     const body = await request.json()
-    const { name, bannerId, logoUrl, themeColor, description } =
+    const { name, bannerUrl, logoUrl, themeColor, description } =
       generalSettingsValidator.parse(body)
     await prismadb.store.update({
       where: {
@@ -44,7 +44,7 @@ export async function PATCH(
       data: {
         name,
         logoUrl,
-        bannerId,
+        bannerUrl,
         themeColor,
         description,
       },

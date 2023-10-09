@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
+import { addDays } from "date-fns"
 import { z } from "zod"
 
 import prismadb from "@/lib/prismadb"
 import { getAuthSession } from "@/lib/session"
+import { generalSettingsValidator } from "@/lib/validators/settings-validators"
 import { createStoreFormSchema } from "@/lib/validators/store-validators"
 
 export async function POST(request: Request) {
@@ -12,17 +14,23 @@ export async function POST(request: Request) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
     const body = await request.json()
-    const { name } = createStoreFormSchema.parse(body)
+    const { name, description, logoUrl, themeColor } =
+      generalSettingsValidator.parse(body)
     const user = await prismadb.user.findUnique({
       where: {
         id: session.user.id,
       },
     })
+    if (user?.hasUsedTrial) {
+      return NextResponse.json({ hasUsedTrial: true }, { status: 200 })
+    }
     const store = await prismadb.store.create({
       data: {
-        userId:session.user.id,
+        userId: session.user.id,
         name,
         isTest: !user?.hasUsedTrial,
+        trialStart: user?.hasUsedTrial === false ? new Date() : null,
+        trialEnd: user?.hasUsedTrial === false ? addDays(new Date(), 14) : null,
       },
     })
     if (user?.hasUsedTrial === false) {

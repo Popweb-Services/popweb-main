@@ -14,7 +14,15 @@ interface IParams {
     shippingRateId: string
   }
 }
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+}
 
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders })
+}
 export async function PATCH(request: Request, { params }: IParams) {
   try {
     const session = await getAuthSession()
@@ -76,5 +84,28 @@ export async function DELETE(_request: Request, { params }: IParams) {
   } catch (error) {
     console.log(error)
     return new NextResponse("Internal sever error", { status: 500 })
+  }
+}
+
+export async function GET(
+  request: Request,
+  { params }: IParams
+): Promise<NextResponse> {
+  try {
+    const shippingRate = await prismadb.shippingRate.findUnique({
+      where: {
+        id: params.shippingRateId,
+      },
+    })
+    return NextResponse.json(shippingRate, {
+      status: 200,
+      headers: corsHeaders,
+    })
+  } catch (error) {
+    console.log("[SHIPPING_RATE_GET]", error)
+    return new NextResponse("internal server error", {
+      status: 500,
+      headers: corsHeaders,
+    })
   }
 }

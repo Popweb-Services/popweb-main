@@ -21,6 +21,16 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
       active: pathname === `/dashboard/${params.storeId}`,
     },
     {
+      label: "سفارشات",
+      href: `/dashboard/${params.storeId}/orders`,
+      active: pathname.includes(`/dashboard/${params.storeId}/orders`),
+    },
+    {
+      label: "مشتریان",
+      href: `/dashboard/${params.storeId}/customers`,
+      active: pathname.includes(`/dashboard/${params.storeId}/customers`),
+    },
+    {
       label: "محصولات",
       href: `/dashboard/${params.storeId}/products`,
       active: pathname.includes(`/dashboard/${params.storeId}/products`),
@@ -30,6 +40,7 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
       href: `/dashboard/${params.storeId}/categories`,
       active: pathname.includes(`/dashboard/${params.storeId}/categories`),
     },
+
     {
       label: "بنر ها",
       href: `/dashboard/${params.storeId}/banners`,
@@ -43,7 +54,7 @@ const DashboardMainNav: React.FC<DashboardMainNavProps> = ({}) => {
   ]
   return (
     <>
-      <nav className="hidden md:block">
+      <nav className="hidden lg:block">
         <ul className="flex items-center justify-start gap-x-1">
           {routes.map((route) => (
             <li

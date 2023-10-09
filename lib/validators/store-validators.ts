@@ -24,7 +24,6 @@ export const createBannerFormSchema = z.object({
   imageUrl: z
     .string()
     .min(1, { message: "بنر اجباری است" })
-    .regex(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i, { message: "فرمت نامعتبر" }),
 })
 
 export const createProductFormSchema = z.object({

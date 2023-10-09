@@ -30,12 +30,11 @@ export async function DELETE(request: Request, { params }: IParams) {
         status: 403,
       })
     }
-    await s3Client
-      .deleteObject({
-        Bucket: process.env.BUCKET_NAME as string,
-        Key: params.fileKey,
-      })
-      .promise()
+    await s3Client.deleteObject({
+      Bucket: process.env.BUCKET_NAME as string,
+      Key: params.fileKey,
+    })
+
     return new NextResponse("File Deleted", { status: 200 })
   } catch (error) {
     console.log("[UPLOAD_IMAGE_DELETE]", error)
