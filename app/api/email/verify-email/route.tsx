@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       { expiresIn: "1d" },
       (error, emailToken) => {
         console.log(error)
-        const url = `https://localhost:3000/verify-email/${emailToken}`
+        const url = `https://popweb.ir/verify-email/${emailToken}`
         transporter.sendMail({
           from: "notifications@mail.poormehdi.com",
           to: session.user.email,

@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       process.env.PASSWORD_SECRET!,
       { expiresIn: "1d" },
       (error, emailToken) => {
-        const url = `https://localhost:3000/reset/${emailToken}`
+        const url = `https://popweb.ir/reset/${emailToken}`
         transporter.sendMail({
           from: "notifications@mail.poormehdi.com",
           to: email,
