@@ -27,16 +27,13 @@ const PaymentClient: React.FC<PaymentClientProps> = ({}) => {
   }, [selectedPlan])
   const { mutate: pay, isLoading } = useMutation({
     mutationFn: async () => {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_VANDAR_ENDPOINT}/api/v3/send`,
-        {
-          api_key: process.env.VANDAR_API_KEY,
-          amount: amount,
-          callback_url: "https://popweb.ir/payment/success",
-          mobile_number: "09103406985",
-          port: bank,
-        }
-      )
+      const { data } = await axios.post(`https://ipg.vandar.io/api/v3/send`, {
+        api_key: process.env.VANDAR_API_KEY,
+        amount: amount,
+        callback_url: "https://popweb.ir/payment/success",
+        mobile_number: "09103406985",
+        port: bank,
+      })
       console.log(data)
     },
   })
