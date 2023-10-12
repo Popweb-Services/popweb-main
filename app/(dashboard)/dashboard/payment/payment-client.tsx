@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { IoMdPricetag } from "react-icons/io"
@@ -18,6 +19,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({}) => {
   const [selectedPlan, setSelectedPlan] = useState("12-mounths")
   const [bank, setBank] = useState("SAMAN")
   const [amount, setAmount] = useState<number>()
+  const router = useRouter()
   useEffect(() => {
     if (selectedPlan === "12-mounths") {
       setAmount(192000000)
@@ -27,14 +29,12 @@ const PaymentClient: React.FC<PaymentClientProps> = ({}) => {
   }, [selectedPlan])
   const { mutate: pay, isLoading } = useMutation({
     mutationFn: async () => {
-      const { data } = await axios.post(`https://ipg.vandar.io/api/v3/send`, {
-        api_key: process.env.VANDAR_API_KEY,
-        amount: amount,
-        callback_url: "https://popweb.ir/payment/success",
+      const { data } = await axios.post("/api/payment/get-token", {
+        amount: 10000,
         mobile_number: "09103406985",
         port: bank,
       })
-      console.log(data)
+      router.push(`https://ipg.vandar.io/v3/${data.token}`)
     },
   })
   return (

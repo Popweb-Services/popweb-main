@@ -33,6 +33,7 @@ export async function GET(
         products: {
           include: {
             variants: true,
+            options: true,
           },
         },
         subcategories: {
@@ -40,6 +41,7 @@ export async function GET(
             products: {
               include: {
                 variants: true,
+                options: true,
               },
             },
             subcategories: {
@@ -47,6 +49,7 @@ export async function GET(
                 products: {
                   include: {
                     variants: true,
+                    options: true,
                   },
                 },
                 subcategories: true,

@@ -71,7 +71,7 @@ const StoreOverviewPage = async ({ params }: StoreOverviewPageProps) => {
                       : "اشتراک فروشگاه شما به پایان رسیده است ، لطفا جهت استفاده از امکانات پنل اشتراک خود را تمدید کنید."}
                   </p>
                   <Link
-                    href={"/dashboard/payment"}
+                    href={`/dashboard/payment?storeId=${store?.id}`}
                     className="flex items-center text-rose-500 font-bold px-3 py-2 border rounded-lg border-rose-500 text-sm mt-3 w-[150px] justify-center hover:opacity-70 group duration-300 gap-x-2"
                   >
                     <p>تمدید اشتراک</p>
