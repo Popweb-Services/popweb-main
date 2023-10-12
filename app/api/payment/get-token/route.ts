@@ -22,6 +22,6 @@ export async function POST(request: Request): Promise<NextResponse> {
     if (error instanceof z.ZodError) {
       return new NextResponse(error.message, { status: 422 })
     }
-    return new NextResponse("internal server error", { status: 500 })
+    return NextResponse.json(error, { status: 500 })
   }
 }
