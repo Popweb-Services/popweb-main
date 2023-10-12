@@ -16,6 +16,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       callback_url: "https://popweb.ir/payment/verify-transaction",
       port,
     })
+    console.log(data)
     return NextResponse.json(data, { status: 200 })
   } catch (error) {
     console.log("[GET_TOKEN]", error)
