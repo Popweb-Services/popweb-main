@@ -5,6 +5,7 @@
     "landing-page",
     "auth",
     "email",
-    "dashboard"
+    "dashboard",
+    "payment gateway"
   ]
 }
