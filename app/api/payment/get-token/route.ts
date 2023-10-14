@@ -13,7 +13,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       api_key: process.env.VANDAR_API_KEY,
       amount,
       mobile_number,
-      callback_url: "https://popweb.ir/payment/verify-transaction",
+      callback_url: "https://popweb.ir/",
       port,
     })
     console.log(data)

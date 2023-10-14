@@ -100,7 +100,7 @@ export async function GET(
     return NextResponse.json(shippingRate, {
       status: 200,
       headers: corsHeaders,
-    })
+      })
   } catch (error) {
     console.log("[SHIPPING_RATE_GET]", error)
     return new NextResponse("internal server error", {
