@@ -28,7 +28,10 @@ const VerifyTransactionPage = async ({
   }
   const response = await axios.post(
     `/api/${params.storeId}/payment/verify-transaction`,
-    {}
+    {
+      token: searchParams.token,
+      subscriptionMounths: searchParams.subscriptionMounths,
+    }
   )
   console.log(response.data)
   if (response.status !== 200) {
