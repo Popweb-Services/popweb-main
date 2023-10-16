@@ -36,6 +36,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ store }) => {
         amount: 10000,
         mobile_number: "09103406985",
         port: bank,
+        subscriptionMounths: selectedPlan === "12-mounths" ? 12 : 3,
       })
       router.push(`https://ipg.vandar.io/v3/${data.token}`)
     },

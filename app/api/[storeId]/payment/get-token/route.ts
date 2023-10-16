@@ -10,7 +10,7 @@ export async function POST(
 ): Promise<NextResponse> {
   try {
     const body = await request.json()
-    const { amount, mobile_number, port } =
+    const { amount, mobile_number, port, subscriptionMounths } =
       paymentTokenRequestDataValidator.parse(body)
     const { data } = await axios.post("https://ipg.vandar.io/api/v3/send", {
       api_key: process.env.VANDAR_API_KEY,
