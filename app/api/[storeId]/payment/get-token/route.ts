@@ -4,7 +4,10 @@ import { z } from "zod"
 
 import paymentTokenRequestDataValidator from "@/lib/validators/payment-token-request-data"
 
-export async function POST(request: Request): Promise<NextResponse> {
+export async function POST(
+  request: Request,
+  { params }: { params: { storeId: string } }
+): Promise<NextResponse> {
   try {
     const body = await request.json()
     const { amount, mobile_number, port } =
@@ -13,8 +16,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       api_key: process.env.VANDAR_API_KEY,
       amount,
       mobile_number,
-      callback_url:
-        "https://popweb.ir/dashboard/payment/verify-transaction",
+      callback_url: `https://popweb.ir/dashboard/payment/verify-transaction?storeId=${params.storeId}`,
       port,
     })
     return NextResponse.json(data, { status: 200 })

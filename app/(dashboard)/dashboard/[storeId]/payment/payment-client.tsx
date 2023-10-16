@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { Store } from "@prisma/client"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { IoMdPricetag } from "react-icons/io"
@@ -13,9 +14,11 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Separator } from "@/components/ui/separator"
 
-interface PaymentClientProps {}
+interface PaymentClientProps {
+  store: Store
+}
 
-const PaymentClient: React.FC<PaymentClientProps> = ({}) => {
+const PaymentClient: React.FC<PaymentClientProps> = ({ store }) => {
   const [selectedPlan, setSelectedPlan] = useState("12-mounths")
   const [bank, setBank] = useState("SAMAN")
   const [amount, setAmount] = useState<number>()
@@ -29,7 +32,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({}) => {
   }, [selectedPlan])
   const { mutate: pay, isLoading } = useMutation({
     mutationFn: async () => {
-      const { data } = await axios.post("/api/payment/get-token", {
+      const { data } = await axios.post(`/api/${store.id}/payment/get-token`, {
         amount: 10000,
         mobile_number: "09103406985",
         port: bank,

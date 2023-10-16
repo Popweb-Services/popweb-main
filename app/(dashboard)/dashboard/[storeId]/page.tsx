@@ -45,9 +45,9 @@ const StoreOverviewPage = async ({ params }: StoreOverviewPageProps) => {
   })
   const isSubscriptionEnded = () => {
     if (store?.isTest) {
-      return !isAfter(new Date(), store.trialEnd!)
+      return isAfter(new Date(), store.trialEnd!)
     }
-    return !isAfter(new Date(), store?.subscriptionEnd!)
+    return isAfter(new Date(), store?.subscriptionEnd!)
   }
   return (
     <>

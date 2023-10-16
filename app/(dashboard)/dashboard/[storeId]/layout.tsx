@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
 import { notFound, redirect } from "next/navigation"
+import { isAfter } from "date-fns"
 
 import prismadb from "@/lib/prismadb"
 
@@ -13,11 +14,15 @@ interface IndividualStoreLayoutProps {
 const IndividualStoreLayout = async ({
   params,
   children,
-}:IndividualStoreLayoutProps) => {
+}: IndividualStoreLayoutProps) => {
   try {
     const store = await prismadb.store.findUnique({
       where: { id: params.storeId },
     })
+    console.log(isAfter(new Date(), store?.trialEnd!))
+    if (store?.trialEnd && isAfter(new Date(), store.trialEnd)) {
+      redirect(`/dashborad/${store.id}/subscription-ended`)
+    }
     return (
       <>
         {store?.isTest && (
