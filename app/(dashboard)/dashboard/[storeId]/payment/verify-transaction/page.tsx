@@ -26,23 +26,23 @@ const VerifyTransactionPage = async ({
   if (!searchParams.subscriptionMounths) {
     redirect(`/dashboard/${params.storeId}`)
   }
-  const response = await axios.post(
-    `/api/${params.storeId}/payment/verify-transaction`,
-    {
-      token: searchParams.token,
-      subscriptionMounths: searchParams.subscriptionMounths,
-    }
-  )
-  console.log(response.data)
-  if (response.status !== 200) {
-    return (
-      <div className="w-full">
-        <div className="container h-full flex flex-col items-center justify-center">
-          <h2>payment failed</h2>
-        </div>
-      </div>
-    )
-  }
+  // const response = await axios.post(
+  //   `/api/${params.storeId}/payment/verify-transaction`,
+  //   {
+  //     token: searchParams.token,
+  //     subscriptionMounths: searchParams.subscriptionMounths,
+  //   }
+  // )
+  // console.log(response.data)
+  // if (response.status !== 200) {
+  //   return (
+  //     <div className="w-full">
+  //       <div className="container h-full flex flex-col items-center justify-center">
+  //         <h2>payment failed</h2>
+  //       </div>
+  //     </div>
+  //   )
+  // }
   return (
     <>
       <div className="w-full h-full">
