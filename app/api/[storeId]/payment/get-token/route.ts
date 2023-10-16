@@ -16,7 +16,7 @@ export async function POST(
       api_key: process.env.VANDAR_API_KEY,
       amount,
       mobile_number,
-      callback_url: `https://popweb.ir/dashboard/payment/verify-transaction?storeId=${params.storeId}`,
+      callback_url: `https://popweb.ir/dashboard/${params.storeId}/payment/verify-transaction?storeId=${params.storeId}`,
       port,
     })
     return NextResponse.json(data, { status: 200 })

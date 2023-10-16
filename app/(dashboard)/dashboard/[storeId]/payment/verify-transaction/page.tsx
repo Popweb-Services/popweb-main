@@ -18,6 +18,8 @@ const VerifyTransactionPage = async ({
   searchParams,
   params,
 }: VerifyTransactionPageProps) => {
+  console.log(searchParams)
+  console.log(params)
   if (!searchParams.token) {
     redirect(`/dashborad/${params.storeId}/`)
   }
@@ -25,7 +27,8 @@ const VerifyTransactionPage = async ({
     redirect(`/dashboard/${params.storeId}`)
   }
   const response = await axios.post(
-    `/api/${params.storeId}/payment/verify-transaction`
+    `/api/${params.storeId}/payment/verify-transaction`,
+    {}
   )
   console.log(response.data)
   if (response.status !== 200) {
