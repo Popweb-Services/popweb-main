@@ -35,7 +35,7 @@ const VerifyTransactionPage = async ({
       }
     )
   } catch (error) {
-    console.log(error)
+    console.log('[VERIFY_TRANSACTION_PAGE]',error)
   }
   // if (response.status !== 200) {
   //   return (
