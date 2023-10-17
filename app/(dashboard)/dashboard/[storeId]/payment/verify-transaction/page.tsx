@@ -5,6 +5,8 @@ import { addDays, addMinutes, isAfter, isBefore } from "date-fns"
 
 import prismadb from "@/lib/prismadb"
 
+import VerifyTransactionClient from "./verify-transaction-client"
+
 interface VerifyTransactionPageProps {
   searchParams: {
     [key: string]: string
@@ -48,6 +50,7 @@ const VerifyTransactionPage = async ({
       <div className="w-full h-full">
         <div className="container h-full flex flex-col items-center justify-center">
           <h1>subscribed</h1>
+          <VerifyTransactionClient storeId={params.storeId} />
         </div>
       </div>
     </>
