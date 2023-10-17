@@ -26,17 +26,14 @@ const VerifyTransactionPage = async ({
   if (!searchParams.subscriptionMounths) {
     redirect(`/dashboard/${params.storeId}`)
   }
-  try {
-    const response = await axios.post(
-      `/api/${params.storeId}/payment/verify-transaction`,
-      {
-        token: searchParams.token,
-        subscriptionMounths: searchParams.subscriptionMounths,
-      }
-    )
-  } catch (error) {
-    console.log('[VERIFY_TRANSACTION_PAGE]',error)
-  }
+  const { data } = await axios.post(
+    `/api/${params.storeId}/payment/verify-transaction`,
+    {
+      token: searchParams.token,
+      subscriptionMounths: searchParams.subscriptionMounths,
+    }
+  )
+  console.log(data)
   // if (response.status !== 200) {
   //   return (
   //     <div className="w-full">
