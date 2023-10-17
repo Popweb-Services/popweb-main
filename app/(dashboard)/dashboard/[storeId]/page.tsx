@@ -43,17 +43,12 @@ const StoreOverviewPage = async ({ params }: StoreOverviewPageProps) => {
       customer: true,
     },
   })
-  const isSubscriptionEnded = () => {
-    if (store?.isTest) {
-      return isAfter(new Date(), store.trialEnd!)
-    }
-    return isAfter(new Date(), store?.subscriptionEnd!)
-  }
+
   return (
     <>
       <div dir="rtl" className="pt-20 container mx-auto">
         <div className="grid grid-cols-3 gap-x-5">
-          {isSubscriptionEnded() && (
+          {/* {isSubscriptionEnded() && (
             <div className="w-full col-span-3 p-4 my-4 rounded-xl bg-rose-200 container">
               <div className="flex items-center gap-x-4">
                 <div className="w-14 h-14 flex rounded-xl items-center justify-center border border-rose-500">
@@ -80,7 +75,7 @@ const StoreOverviewPage = async ({ params }: StoreOverviewPageProps) => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
           <div className="p-4 border rounded-lg">
             <p>وضعیت فروش</p>
           </div>
