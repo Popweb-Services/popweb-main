@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 
@@ -13,6 +13,7 @@ const VerifyTransactionClient: React.FC<VerifyTransactionClientProps> = ({
   storeId,
 }) => {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const { mutate: verifyTransaction } = useMutation({
     mutationFn: async () => {
       const { data } = await axios.post(
@@ -24,11 +25,22 @@ const VerifyTransactionClient: React.FC<VerifyTransactionClientProps> = ({
       )
       console.log(data)
     },
+    onSuccess: () => {
+      router.refresh()
+    },
   })
   useEffect(() => {
     verifyTransaction()
   }, [])
-  return <></>
+  return (
+    <>
+      <div className="w-full h-full">
+        <div className="container flex items-center justify-center">
+          subscribed
+        </div>
+      </div>
+    </>
+  )
 }
 
 export default VerifyTransactionClient
