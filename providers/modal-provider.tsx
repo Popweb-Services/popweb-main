@@ -5,6 +5,7 @@ import PaymentModal from "@/components/modals/payment-modal"
 import SelectSubsCriptionModal from "@/components/modals/select-subscription-modal"
 import ShippingRateArchiveAlertModal from "@/components/modals/shipping-rate-archive-alert-modal"
 import ShippingRateDeleteAlertModal from "@/components/modals/shipping-rate-delete-alert-modal"
+import SubscriptionEndedModal from "@/components/modals/subscription-ended-modal"
 
 interface ModalProviderProps {}
 
@@ -18,6 +19,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({}) => {
       <CategoryArchiveAlertModal />
       <ShippingRateArchiveAlertModal />
       <ShippingRateDeleteAlertModal />
+      <SubscriptionEndedModal />
     </>
   )
 }

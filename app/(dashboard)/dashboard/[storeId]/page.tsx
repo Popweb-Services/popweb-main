@@ -48,34 +48,6 @@ const StoreOverviewPage = async ({ params }: StoreOverviewPageProps) => {
     <>
       <div dir="rtl" className="pt-20 container mx-auto">
         <div className="grid grid-cols-3 gap-x-5">
-          {/* {isSubscriptionEnded() && (
-            <div className="w-full col-span-3 p-4 my-4 rounded-xl bg-rose-200 container">
-              <div className="flex items-center gap-x-4">
-                <div className="w-14 h-14 flex rounded-xl items-center justify-center border border-rose-500">
-                  <ImWarning className="w-6 h-6 text-rose-500" />
-                </div>
-                <div className="">
-                  <p className="text-lg font-bold text-rose-500">
-                    {store?.isTest
-                      ? "اتمام مدت نسخه آزمایشی فروشگاه"
-                      : "اتمام اشتراک فروشگاه شما"}
-                  </p>
-                  <p className="text-rose-500">
-                    {store?.isTest
-                      ? "مهلت نسخه آزمایشی فروشگاه شما به پایان رسیده است ، لطفا جهت استفاده از امکانات پنل اشتراک تهیه کنید."
-                      : "اشتراک فروشگاه شما به پایان رسیده است ، لطفا جهت استفاده از امکانات پنل اشتراک خود را تمدید کنید."}
-                  </p>
-                  <Link
-                    href={`/dashboard/payment?storeId=${store?.id}`}
-                    className="flex items-center text-rose-500 font-bold px-3 py-2 border rounded-lg border-rose-500 text-sm mt-3 w-[150px] justify-center hover:opacity-70 group duration-300 gap-x-2"
-                  >
-                    <p>تمدید اشتراک</p>
-                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 duration-300" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )} */}
           <div className="p-4 border rounded-lg">
             <p>وضعیت فروش</p>
           </div>

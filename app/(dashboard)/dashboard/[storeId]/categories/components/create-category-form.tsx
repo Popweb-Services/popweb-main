@@ -15,6 +15,7 @@ import { z } from "zod"
 import { createCategoryFormSchema } from "@/lib/validators/store-validators"
 import useCaategoryDelete from "@/hooks/use-category-delete-alert-modal"
 import useCategoryDeleteAlertModal from "@/hooks/use-category-delete-alert-modal"
+import useSubscriptionModal from "@/hooks/use-subscription-ended-modal"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
@@ -37,6 +38,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 
 interface CreateCategoryFormProps {
+  isSubscriptionEnded: boolean
   category?: Category | null
   categories: Category[]
   banners: Banner[]
@@ -44,6 +46,7 @@ interface CreateCategoryFormProps {
 }
 
 const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
+  isSubscriptionEnded,
   category,
   categories,
   storeId,
@@ -57,6 +60,7 @@ const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
     : "دسته بندی با موفقیت ایجاد شد"
   const { toast } = useToast()
   const router = useRouter()
+  const { onOpen } = useSubscriptionModal()
   const form = useForm({
     resolver: zodResolver(createCategoryFormSchema),
     defaultValues: {
@@ -95,11 +99,18 @@ const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
   }
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
+    console.log(isSubscriptionEnded)
+    if (isSubscriptionEnded) {
+      onOpen()
+    }
+  }, [isSubscriptionEnded])
+  useEffect(() => {
     setIsMounted(true)
   }, [])
   if (!isMounted) {
     return null
   }
+
   return (
     <>
       <div

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 
+import checkSubscriptionEnded from "@/lib/check-subscription"
 import prismadb from "@/lib/prismadb"
 import { Separator } from "@/components/ui/separator"
 
@@ -12,9 +13,7 @@ interface CreateCategoryPageProps {
   }
 }
 
-const CreateCategoryPage = async ({
-  params,
-}:CreateCategoryPageProps) => {
+const CreateCategoryPage = async ({ params }: CreateCategoryPageProps) => {
   const banners = await prismadb.banner.findMany({
     where: {
       storeId: params.storeId,
@@ -36,9 +35,11 @@ const CreateCategoryPage = async ({
   } catch (error) {
     category = undefined
   }
+  const isSubscriptionEnded = await checkSubscriptionEnded(params.storeId)
   return (
     <>
       <CreateCategoryForm
+        isSubscriptionEnded={isSubscriptionEnded}
         storeId={params.storeId}
         categories={categories}
         category={category}

@@ -3,6 +3,9 @@ import { notFound, redirect } from "next/navigation"
 import { isAfter } from "date-fns"
 
 import prismadb from "@/lib/prismadb"
+import { getAuthSession } from "@/lib/session"
+
+import DashboardNavbar from "../components/dashboard-navbar"
 
 interface IndividualStoreLayoutProps {
   children: ReactNode
@@ -15,24 +18,27 @@ const IndividualStoreLayout = async ({
   params,
   children,
 }: IndividualStoreLayoutProps) => {
+  const session = await getAuthSession()
+  if (!session?.user) {
+    return redirect("/sign-in")
+  }
+  const user = await prismadb.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  })
+  const stores = await prismadb.store.findMany({
+    where: {
+      userId: user?.id,
+    },
+  })
   const store = await prismadb.store.findUnique({
     where: { id: params.storeId },
   })
-  console.log(store?.id)
-  console.log(isAfter(new Date(), store?.trialEnd!))
-  if (store?.trialEnd && isAfter(new Date(), store.trialEnd)) {
-    redirect(`/dashborad/subscription-ended?storeId=${params.storeId}`)
-  }
   return (
     <>
-      {store?.isTest && (
-        <>
-          <span className="w-full h-[0.5px] fixed z-20 top-12 bg-[#ED6704]" />
-          <div className="fixed p-1 top-12 text-white z-20 scale-75 origin-top rounded-b-lg left-1/2 -translate-x-1/2 bg-[#ED6704] ">
-            نسخه آزمایشی
-          </div>
-        </>
-      )}
+      <DashboardNavbar store={store!} stores={stores} user={user!} />
+      
       {children}
     </>
   )
