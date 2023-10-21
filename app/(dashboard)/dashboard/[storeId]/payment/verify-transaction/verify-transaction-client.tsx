@@ -25,9 +25,6 @@ const VerifyTransactionClient: React.FC<VerifyTransactionClientProps> = ({
       )
       console.log(data)
     },
-    onSuccess: () => {
-      router.refresh()
-    },
   })
   useEffect(() => {
     verifyTransaction()
@@ -35,7 +32,7 @@ const VerifyTransactionClient: React.FC<VerifyTransactionClientProps> = ({
   return (
     <>
       <div className="w-full h-full">
-        <div className="container flex items-center justify-center">
+        <div className="container h-full flex items-center justify-center">
           subscribed
         </div>
       </div>

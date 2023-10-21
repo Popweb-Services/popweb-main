@@ -33,33 +33,34 @@ const DashboardNavbar = ({ user, stores, store }: DashboardNavbarProps) => {
   }
   return (
     <>
-      {isAfter(new Date(), store.trialEnd!) && (
-        <div className="w-full bg-rose-200 p-4">
-          <div
-            dir="rtl"
-            className="container flex max-md:flex-col items-center justify-between"
-          >
-            <div className="flex max-md:flex-col items-center max-md:gap-y-3 gap-x-3">
-              <ImWarning className="w-5 h-5 max-md:w-8 max-md:h-8 text-rose-600" />
-              <p className="text-rose-600 max-md:text-center">
-                اشتراک فروشگاه شما به اتمام رسیده است، جهت استفاده مجدد از
-                امکانات اشتراک تهیه کنید در غیر این صورت فروشگاه شما حذف خواهد
-                شد.
-              </p>
-            </div>
-            <Link
-              className={cn(
-                buttonVariants({ variant: "default" }),
-                "bg-transparent max-md:mt-3 gap-x-2 max-md:w-full group rounded-lg border text-rose-600 hover:bg-transparent border-rose-500"
-              )}
-              href={`/dashboard/${store.id}/payment`}
+      {isAfter(new Date(), store.trialEnd!) &&
+        pathname !== `/dashboard/${store.id}/payment/verify-transaction` && (
+          <div className="w-full bg-rose-200 p-4">
+            <div
+              dir="rtl"
+              className="container flex max-md:flex-col items-center justify-between"
             >
-              <p>تمدید اشتراک</p>
-              <ArrowLeft className="group-hover:-translate-x-1 max-md:hidden duration-300 w-4 h-4" />
-            </Link>
+              <div className="flex max-md:flex-col items-center max-md:gap-y-3 gap-x-3">
+                <ImWarning className="w-5 h-5 max-md:w-8 max-md:h-8 text-rose-600" />
+                <p className="text-rose-600 max-md:text-center">
+                  اشتراک فروشگاه شما به اتمام رسیده است، جهت استفاده مجدد از
+                  امکانات اشتراک تهیه کنید در غیر این صورت فروشگاه شما حذف خواهد
+                  شد.
+                </p>
+              </div>
+              <Link
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "bg-transparent max-md:mt-3 gap-x-2 max-md:w-full group rounded-lg border text-rose-600 hover:bg-transparent border-rose-500"
+                )}
+                href={`/dashboard/${store.id}/payment`}
+              >
+                <p>تمدید اشتراک</p>
+                <ArrowLeft className="group-hover:-translate-x-1 max-md:hidden duration-300 w-4 h-4" />
+              </Link>
+            </div>
           </div>
-        </div>
-      )}
+        )}
       <div className="w-full h-12 bg-white border-b z-30">
         <div className="container h-full mx-auto flex items-center justify-between">
           <div className="flex items-center gap-x-8">
