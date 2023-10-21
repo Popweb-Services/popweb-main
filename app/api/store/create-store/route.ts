@@ -21,9 +21,6 @@ export async function POST(request: Request) {
         id: session.user.id,
       },
     })
-    if (user?.hasUsedTrial) {
-      return NextResponse.json({ hasUsedTrial: true }, { status: 200 })
-    }
     const store = await prismadb.store.create({
       data: {
         userId: session.user.id,

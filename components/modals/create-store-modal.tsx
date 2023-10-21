@@ -69,10 +69,7 @@ const CreateStoreModal: React.FC<CreateStoreModalProps> = ({}) => {
   const { mutate: createStore, isLoading } = useMutation({
     mutationFn: async (payload: z.infer<typeof createStoreFormSchema>) => {
       const { data } = await axios.post("/api/store/create-store", payload)
-      if (data.hasUsedTrial) {
-        onClose()
-        onSelectSubscriptionModalOpen()
-      }
+      onClose()
     },
     onError: (error) => {
       if (error instanceof AxiosError) {

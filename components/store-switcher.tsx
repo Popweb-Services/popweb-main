@@ -108,12 +108,7 @@ const StoreSwitcher: React.FC<StoreSwitcherProps> = ({
             <CommandGroup>
               <CommandItem
                 onSelect={() => {
-                  setOpen(false)
-                  if (user.hasUsedTrial) {
-                    selectSubscriptionModal.onOpen()
-                  } else {
-                    createStoreModal.onOpen()
-                  }
+                  createStoreModal.onOpen()
                 }}
                 className="cursor-pointer"
               >

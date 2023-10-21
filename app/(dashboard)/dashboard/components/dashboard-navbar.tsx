@@ -8,7 +8,6 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { isAfter } from "date-fns"
 import { ArrowLeft } from "lucide-react"
-import { BsTicketPerforatedFill } from "react-icons/bs"
 import { ImWarning } from "react-icons/im"
 
 import prismadb from "@/lib/prismadb"
@@ -61,14 +60,13 @@ const DashboardNavbar = ({ user, stores, store }: DashboardNavbarProps) => {
           </div>
         </div>
       )}
-      <div className="w-full sticky top-0 h-12 bg-white border-b z-30">
+      <div className="w-full h-12 bg-white border-b z-30">
         <div className="container h-full mx-auto flex items-center justify-between">
           <div className="flex items-center gap-x-8">
             <StoreSwitcher user={user} stores={stores} />
             {stores.length > 0 && <DashboardMainNav />}
           </div>
           <div className="flex items-center gap-x-3">
-            <BsTicketPerforatedFill className="w-6 h-6" />
             {stores.length > 0 && <SettingsButton />}
             <UserAccountNav user={user} />
           </div>
