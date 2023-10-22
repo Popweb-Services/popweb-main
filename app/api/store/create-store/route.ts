@@ -26,8 +26,10 @@ export async function POST(request: Request) {
         userId: session.user.id,
         name,
         isTest: !user?.hasUsedTrial,
-        trialStart: user?.hasUsedTrial === false ? new Date() : null,
-        trialEnd: user?.hasUsedTrial === false ? addDays(new Date(), 14) : null,
+        subscriptionStart: new Date(),
+        subscriptionEnd: user?.hasUsedTrial
+          ? new Date()
+          : addDays(new Date(), 14),
       },
     })
     if (user?.hasUsedTrial === false) {
