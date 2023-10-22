@@ -56,8 +56,8 @@ export async function POST(
               id: store?.id,
             },
             data: {
-              trialStart: new Date(),
-              trialEnd: addMinutes(new Date(), mounths),
+              subscriptionStart: new Date(),
+              subscriptionEnd: addMinutes(new Date(), mounths),
             },
           })
         }

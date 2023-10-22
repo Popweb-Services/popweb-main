@@ -8,7 +8,7 @@ const checkSubscriptionEnded = async (storeId: string) => {
       id: storeId,
     },
   })
-  if (isAfter(new Date(), store?.trialEnd!)) {
+  if (isAfter(new Date(), store?.subscriptionEnd!)) {
     return true
   }
   return false
