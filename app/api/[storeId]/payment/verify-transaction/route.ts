@@ -47,7 +47,7 @@ export async function POST(
             data: {
               // add 12 mounts in real app
               isTest: false,
-              trialEnd: addMinutes(store?.trialEnd!, mounths),
+              subscriptionEnd: addMinutes(store?.trialEnd!, mounths),
             },
           })
         } else {
