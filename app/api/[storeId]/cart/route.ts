@@ -22,7 +22,7 @@ export async function POST(
     const body = await request.json()
     const { productId, variantId, customerId, deviceId } =
       addToCartValidator.parse(body)
-
+    
     if (!deviceId && !customerId) {
       return new NextResponse("invalid request data passed", {
         status: 400,

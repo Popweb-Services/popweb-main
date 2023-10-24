@@ -62,7 +62,7 @@ const DashboardNavbar = ({ user, stores, store }: DashboardNavbarProps) => {
           </div>
         )}
       {!store.isTest &&
-        isAfter(new Date(), store.subscriptionEnd!) &&
+        !store.subscriptionStart &&
         pathname !== `/dashboard/${store.id}/payment/verify-transaction` && (
           <div className="w-full bg-yellow-200 p-4">
             <div

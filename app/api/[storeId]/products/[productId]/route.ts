@@ -191,6 +191,7 @@ export async function GET(request: Request, { params }: IParams) {
         features: true,
       },
     })
+    console.log(product)
     return NextResponse.json(product, { status: 200, headers: corsHeaders })
   } catch (error) {
     console.log("[PRODUCT_GET]", error)

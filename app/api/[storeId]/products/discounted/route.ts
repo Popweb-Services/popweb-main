@@ -11,10 +11,14 @@ const corsHeaders = {
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders })
 }
-export async function GET(_request: Request): Promise<NextResponse> {
+export async function GET(
+  _request: Request,
+  { params }: { params: { storeId: string } }
+): Promise<NextResponse> {
   try {
     const products = await prismadb.product.findMany({
       where: {
+        storeId: params.storeId,
         isDiscounted: true,
         isArchived: false,
       },
