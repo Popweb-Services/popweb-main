@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["popweb.storage.iran.liara.space", "trustseal.enamad.ir"],
+    domains: ["popweb.storage.iran.liara.space"],
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
+  output: 'standalone'
 }
 
 export default nextConfig
