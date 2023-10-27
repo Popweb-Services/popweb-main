@@ -14,7 +14,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       "https://api.iran.liara.ir/v1/projects",
       {
         name: randomUUID(),
-        planID: "small",
+        planID: "ir-mini",
         platform: "next",
       },
       {
