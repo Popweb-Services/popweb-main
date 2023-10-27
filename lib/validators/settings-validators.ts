@@ -3,6 +3,13 @@ import { z } from "zod"
 export const generalSettingsValidator = z.object({
   logoUrl: z.string().optional(),
   name: z.string().min(3),
+  appName: z
+    .string()
+    .min(3, { message: "شناسه فروشگاه باید حداقل 3 کاراکتر باشد." })
+    .regex(/^[a-zA-z-?]/g, {
+      message:
+        "لطفا فقط از کاراکترهای a-z، اعداد و یا خط تیره (-) استفاده کنید. دست کم ۳ کاراکتر.",
+    }),
   description: z
     .string()
     .min(50, {

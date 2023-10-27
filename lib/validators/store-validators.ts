@@ -2,6 +2,7 @@ import { z } from "zod"
 
 export const createStoreFormSchema = z.object({
   name: z.string().min(5, { message: "نام فروشگاه باید حداقل 5 حرف باشد" }),
+ 
 })
 export const createCategoryFormSchema = z.object({
   name: z.string().min(3, { message: "نام دسته بندی باید حداقل 3 حرف باشد" }),
@@ -21,9 +22,7 @@ export const shippingRateFormSchema = z.object({
 
 export const createBannerFormSchema = z.object({
   name: z.string().min(3, { message: "نام بنر باید حداقل شامل 3 حرف باشد." }),
-  imageUrl: z
-    .string()
-    .min(1, { message: "بنر اجباری است" })
+  imageUrl: z.string().min(1, { message: "بنر اجباری است" }),
 })
 
 export const createProductFormSchema = z.object({
