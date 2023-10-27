@@ -18,6 +18,8 @@ interface StoreOverviewPageProps {
   }
 }
 
+const revalidate = 0
+
 const StoreOverviewPage = async ({ params }: StoreOverviewPageProps) => {
   const session = await getAuthSession()
   if (!session?.user) {

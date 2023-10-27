@@ -15,7 +15,9 @@ export async function POST(
         id: params.storeId,
       },
     })
-
+    if (!store) {
+      return new NextResponse("invalid store id", { status: 400 })
+    }
     const alreadyHasSubscription = isAfter(store?.trialEnd!, new Date())
     const requestPayloadSchema = z.object({
       token: z.string(),
@@ -76,7 +78,10 @@ export async function POST(
     } else {
       return new NextResponse("no payment detected", { status: 400 })
     }
-    console.log(data)
+    // deploy application if store has not deployed
+    if (!store.isDeployed) {
+      await axios.post(`/api/${store.id}/deploy-website`)
+    }
     return new NextResponse("subscription updated", { status: 200 })
   } catch (error) {
     console.log("[VERIFY_TRANSACTION]", error)

@@ -60,6 +60,7 @@ model Store {
   description       String?
   logoUrl           String?
   isTest            Boolean         @default(false)
+  isDeployed        Boolean         @default(false)
   userId            String          @db.ObjectId
   user              User            @relation("StoreToUser", fields: [userId], references: [id])
   categories        Category[]      @relation("CategoryToStore")
