@@ -35,6 +35,9 @@ const IndividualStoreLayout = async ({
   const store = await prismadb.store.findUnique({
     where: { id: params.storeId },
   })
+  if(store?.userId !== user?.id){
+    return redirect('/dashboard')
+  }
   return (
     <>
       <DashboardNavbar store={store!} stores={stores} user={user!} />
