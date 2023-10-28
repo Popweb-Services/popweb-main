@@ -26,7 +26,10 @@ export async function POST(request: Request): Promise<NextResponse> {
       }
     )
     // deploy website
-    const file = await readFile("digikala-theme.tar.gz")
+    const websiteSourceCode = await readFile("digikala-theme.tar.gz")
+    const blob = new Blob([websiteSourceCode])
+    const reader = new FileReader()
+    const file = reader.readAsBinaryString(blob)
     await axios.post(
       `https://api.iran.liara.ir/v2/projects/${tempName}/sources`,
       {
