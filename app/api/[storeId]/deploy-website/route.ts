@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto"
+import { readFile } from "fs/promises"
 import { NextResponse } from "next/server"
 import axios from "axios"
 import { z } from "zod"
@@ -10,12 +11,26 @@ export async function POST(request: Request): Promise<NextResponse> {
       appName: z.string(),
     })
     const { appName } = requestSchema.parse(body)
+    const tempName = randomUUID()
     await axios.post(
       "https://api.iran.liara.ir/v1/projects",
       {
-        name: randomUUID(),
+        name: tempName,
         planID: "ir-mini",
         platform: "next",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.LIARA_API_KEY}`,
+        },
+      }
+    )
+    // deploy website
+    const file = await readFile("digikala-theme.tar.gz")
+    await axios.post(
+      `https://api.iran.liara.ir/v2/projects/${tempName}/sources`,
+      {
+        file,
       },
       {
         headers: {
