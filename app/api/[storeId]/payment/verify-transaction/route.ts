@@ -80,7 +80,7 @@ export async function POST(
     }
     // deploy application if store has not deployed
     if (!store.isDeployed) {
-      await axios.post(`https://popweb.ir/api/${store.id}/deploy-website`)
+      await axios.post(`https://popweb.ir/api/${store.id}/deploy-website`,{appName:"test"})
     }
     return new NextResponse("subscription updated", { status: 200 })
   } catch (error) {
